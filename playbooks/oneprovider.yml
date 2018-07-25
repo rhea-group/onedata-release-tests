@@ -58,7 +58,7 @@
           'Please enter the longitude of your provider \([^.]*\)\:': "51.1234"
           'Do you want .*use subdomain delegation to acquire a FQDN for your Oneprovider.*': "y"
           'Please enter the subdomain for your oneprovider.*': "{{ansible_hostname}}"
-          'Do you want Onezone to create Let''s Encrypt certificate for Oneprovider.*': "y"
+          'Do you want Onezone to create Let''s Encrypt certificate for Oneprovider.*': "n"
           'Please enter a path to a private key for domain.*': ""
           'Please enter a path to a public certificate for domain.*': ""
           'Please enter a path to a public certificate signing authority for domain.*': ""

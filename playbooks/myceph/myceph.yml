@@ -1,0 +1,190 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Stop firewalld
+      systemd:
+        name: firewalld.service
+        enabled: no
+        state: stopped
+      ignore_errors: yes
+    - name: Install epel-release
+      yum: name={{item}} state=installed 
+      with_items:
+        - epel-release
+    - name: Install fio, iotop, nmon
+      yum: name={{item}} state=installed 
+      with_items:
+        - fio
+        - iotop
+        - nmon
+    - name: Ceph repo key import
+      rpm_key:
+        key: https://download.ceph.com/keys/release.asc
+      ignore_errors: yes
+    - name: Add Ceph repo
+      copy:
+        src: ceph.repo
+        dest: /etc/yum.repos.d/ceph.repo
+    - name: Install ceph packages
+      yum: name={{item}} state=installed disable_gpg_check=yes
+      with_items:
+        # - ceph-deploy
+        - ceph
+        # - ceph-mds
+        # - ceph-mgr
+        # - ceph-mon
+        # - ceph-osd
+    - name: Check ceph-deploy
+      stat:
+        path: /usr/bin/ceph-deploy
+      register: rc
+    - name: Install ceph-deploy
+      shell:  rpm -Uvh http://download.ceph.com/rpm-luminous/el7/noarch/ceph-deploy-1.5.39-0.noarch.rpm  --nodeps
+      when: rc.stat.exists == False
+      
+- hosts: mgt
+  connection: local
+  tasks:
+    - name: Ping mon
+      shell: for i in {{ groups['mons'] | map('extract', hostvars, ['ansible_host'])|join( " " ) }}; do ping -c 1 $i; done
+      register: ping
+    - debug: msg={{ping.stdout}}
+    - name: Test ssh to mon
+      shell: ssh -v {{ groups['mons'] | map('extract', hostvars, ['ansible_host'])|join( " " ) }} date
+      register: ssh
+      until: ssh.rc == 0
+      retries: 20
+      delay: 6
+      changed_when: false
+      failed_when: false
+    - debug: msg={{ssh.stdout}}
+    - debug: msg={{ssh.stderr}}
+    - name: Print env
+      shell: env
+      register: env
+    - debug: msg={{env.stdout}}
+    - name: Check ssh
+      shell: echo Checking ssh ...
+      failed_when: ssh.rc != 0
+    - name: New Ceph 
+      shell: ceph-deploy new --no-ssh-copykey {{ groups['mons']|join( " " ) }}
+      args:
+        chdir: "{{ansible_env.HOME}}"
+    - name: Set osd_pool_default_size
+      lineinfile:
+        path: "{{ansible_env.HOME}}/ceph.conf"
+        regexp: "^osd_pool_default_size"
+        line: "osd_pool_default_size = 1"
+    - name: Set mon_allow_pool_delete
+      lineinfile:
+        path: "{{ansible_env.HOME}}/ceph.conf"
+        regexp: "^mon_allow_pool_delete"
+        line: "mon_allow_pool_delete = true"
+    - name: Set journal size
+      lineinfile:
+        path: "{{ansible_env.HOME}}/ceph.conf"
+        regexp: "^osd_journal_size"
+        line: "osd_journal_size = 1024"
+    - name: Mon create initial Ceph
+      shell: ceph-deploy --overwrite-conf mon create-initial
+      args:
+        chdir: "{{ansible_env.HOME}}"
+    - name: Admin Ceph
+      shell: ceph-deploy --overwrite-conf admin {{item}}
+      with_inventory_hostnames:
+        - osds
+        - mons
+        - mgt
+        - ops
+      args:
+        chdir: "{{ansible_env.HOME}}"
+    - name: Mgr create Ceph
+      shell: ceph-deploy mgr create {{item}}
+      with_inventory_hostnames:
+        - mons
+      args:
+        chdir: "{{ansible_env.HOME}}"
+        
+- hosts: osds
+  tasks:
+  - name: Copy this-prepare-osds.sh
+    copy:
+      src: this-prepare-osds.sh
+      dest: ~/this-prepare-osds.sh
+      mode: 0500
+    when: vol_prefix != "/dev/nvme" and vol_prefix != "/dev/ram"
+  - name: Copy this-prepare-osds.sh (NVMe)
+    copy:
+      src: this-prepare-osds-nvme.sh
+      dest: ~/this-prepare-osds.sh
+      mode: 0500
+    when: vol_prefix == "/dev/nvme"
+  - name: Copy this-prepare-osds.sh (RAM)
+    copy:
+      src: this-prepare-osds-ram.sh
+      dest: ~/this-prepare-osds.sh
+      mode: 0500
+    when: vol_prefix == "/dev/ram"
+  - name: Prepare OSDs 
+    shell: ~/this-prepare-osds.sh {{ osd_disks }} {{ vol_prefix }}   # Prepare osd_disks OSDs on the current
+    when: vol_prefix != "/dev/ram"                                        # host. Assume first disk is
+                                                                     # {{ vol_prefix }}b, second
+                                                                     # {{ vol_prefix }}c and so on
+  - name: Prepare OSDs (RAM)
+    shell: ~/this-prepare-osds.sh {{ osd_disks }} {{ vol_prefix }} {{ ramdisk_size }} {{ ramdisk_type }}
+    when: vol_prefix == "/dev/ram"
+- hosts: mgt
+  tasks:
+  vars:
+    # pgs: "{{ ((groups['osds'] | length) * (osd_disks|int) * 4) }}"
+    # pgs: "{{ ((groups['osds'] | length) * (osd_disks|int)) * 8 }}"
+    pgs: 512
+  tasks:
+  - name: Create pool onedata
+    shell: sudo ceph osd pool create onedata {{ pgs }}
+  # - name: Deploy MDS
+  #   shell: ceph-deploy mds create {{ groups['mons'][0] }}
+  # - name: Create pool cephfs_data
+  #   shell: sudo ceph osd pool create cephfs_data {{ pgs }}
+  # - name: Create pool cephfs_metadata
+  #   shell: sudo ceph osd pool create cephfs_metadata {{ pgs }}
+  # - name: Create cephfs
+  #   shell: sudo ceph fs new cephfs cephfs_metadata cephfs_data --force
+  - name: Crush tunables hammer
+    shell: sudo ceph osd crush tunables hammer
+  - name: Enable dashboard
+    shell: sudo ceph mgr module enable dashboard   
+
+- hosts: ops
+  tasks:
+  - name: Copy /etc/hosts
+    become: yes
+    become_user: root
+    copy:
+      src: /etc/hosts
+      dest:  /etc/hosts
+      mode: 0644
+  - name: Copy keyring
+    copy:
+      src: ~/ceph.client.admin.keyring
+      dest:  ~/ceph.client.admin.keyring
+      mode: 0600
+  - name: Create /mnt/ceph
+    become: yes
+    become_user: root
+    file:
+      path: /mnt/ceph
+      state: directory
+      mode: 0755
+  - name: Get client.admin keyring
+    shell: grep key ~/ceph.client.admin.keyring | awk '{print $3}'
+    register: keyring
+  - name: Mount CephFS
+    become: yes
+    become_user: root
+    mount:
+      path: /mnt/ceph
+      fstype: ceph
+      src: "{{ groups['mons'][0] }}:6789:/"
+      opts: "name=admin,secret={{keyring.stdout}}"
+      state: mounted

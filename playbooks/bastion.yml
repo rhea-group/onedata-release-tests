@@ -1,0 +1,18 @@
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Set TCP forwwarding for ssh
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "AllowTcpForwarding"
+        line: "AllowTcpForwarding yes"
+    - name: Restart sshd
+      systemd:
+        name: sshd
+        state: restarted
+    - name: Stop firewalld
+      systemd:
+        name: firewalld.service
+        enabled: no
+        state: stopped
+      ignore_errors: yes

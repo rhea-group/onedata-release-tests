@@ -1,0 +1,124 @@
+
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Set max number of file
+      lineinfile:
+        regexp: soft nofile
+        line: "* soft nofile 63535"
+        state: present
+        path: /etc/security/limits.conf
+    - name: Set max number of file
+      lineinfile:
+        regexp: hard nofile
+        line: "* hard nofile 63535"
+        state: present
+        path: /etc/security/limits.conf
+    - name: Touch /etc/sysctl.d/50-swappiness.conf
+      shell: sudo touch /etc/sysctl.d/50-swappiness.conf
+    - name: Set swappiness
+      lineinfile:
+        regexp: vm.swappiness=
+        line: vm.swappiness=0
+        state: present
+        path: /etc/sysctl.d/50-swappiness.conf
+    #   when: ansible_distribution == 'CentOS'
+    # - name: Set swappiness
+    #   lineinfile:
+    #     regexp: vm.swappiness=
+    #     line: vm.swappiness=0
+    #     state: present
+    #     path: /etc/sysctl.d/50-swappiness.conf
+    #   when: ansible_distribution == 'Ubuntu'
+    - name: copy disable-thp.service
+      copy:
+        src: disable-thp.service
+        dest: /etc/systemd/system/disable-thp.service
+    - name: Enable disable-thp.service
+      systemd:
+        name: disable-thp
+        state: started
+    - name: mkdir /opt/onedata
+      file:
+        path: /opt/onedata
+        state: directory
+        mode: 0755
+    - name: Check for /dev/nvme0n1
+      stat:
+        path: /dev/nvme0n1
+      register: nvme_stat
+    - name: Make filesystem on NVMe
+      filesystem:
+        dev: /dev/nvme0n1
+        fstype: xfs
+        opts: -f
+      when: nvme_stat.stat.exists == True
+    - name: Mount /opt/onedata
+      mount:
+        path: /opt/onedata
+        src: /dev/nvme0n1
+        state: mounted
+        fstype: xfs
+      when: nvme_stat.stat.exists == True
+    # - name: mkdir /opt/onedata/oneprovider
+    #   file:
+    #     path: /opt/onedata/oneprovider
+    #     state: directory
+    #     mode: 0755
+    # - name: mkdir /opt/onedata/oneprovider/certs
+    #   file:
+    #     path: /opt/onedata/oneprovider/certs
+    #     state: directory
+    #     mode: 0755
+    # - name: mkdir /opt/onedata/oneprovider/persistence
+    #   file:
+    #     path: /opt/onedata/oneprovider/persistence
+    #     state: directory
+    #     mode: 0755
+    - name: Set hostname
+      hostname:
+        name: "{{ opname }}.{{ domain }}"
+    - name: Set FQDN in /etc/hosts
+      become: yes
+      become_user: root
+      lineinfile:
+        path: /etc/hosts
+        regexp: "^{{ ansible_default_ipv4.address }}"
+        line: "{{ ansible_default_ipv4.address }} {{ opname }}.{{ domain }} {{opname}}"
+    # - name: Copy oneprovider.service
+    #   become: yes
+    #   become_user: root
+    #   copy:
+    #     src: oneprovider.service
+    #     dest: /etc/systemd/system/oneprovider.service
+    # - name: Copy docker-compose.yml
+    #   become: yes
+    #   become_user: root
+    #   copy:
+    #     src: docker-compose.yml
+    #     dest: /opt/onedata/oneprovider/docker-compose.yml
+    - name: Check for docker
+      stat:
+        path: /usr/bin/docker
+      register: ds
+    - name: Install docker
+      shell: curl --tlsv1 -sSL https://get.docker.com/ | sh
+      when: ds.stat.exists == False
+    - name: Start docker
+      systemd:
+        name: docker
+        state: started
+    - name: Check for docker-compose
+      stat:
+        path: /usr/bin/docker-compose
+      register: cs      
+    - name: Install docker-compose
+      become: yes
+      become_user: root
+      shell: |
+        curl --tlsv1 -sSL -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/bin/docker-compose
+        chmod +x /usr/bin/docker-compose
+      when: cs.stat.exists == False
+
+      
