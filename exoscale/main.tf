@@ -43,6 +43,7 @@ resource "null_resource" "reboot" {
 }
 
 resource "exoscale_compute" "op-ceph" {
+  depends_on = ["exoscale_affinity.op"]
   display_name =  "${var.project}-exo-op"
   template = "Linux CentOS 7.4 64-bit"
   zone = "${var.zone}"
