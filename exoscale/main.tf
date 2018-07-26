@@ -5,7 +5,7 @@ provider "exoscale" {
 
 resource "exoscale_ssh_keypair" "exo" {
   name = "${var.project}-exo"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtQTjk+AQfb41PhUBCBCIn2ob+a4HyL6R71/pl5tsGoeXFtaw3syJ4uVNSVqWTYP3nmp/voPok4p26HkXLwIeCkcT+Wq4NiFhzOtL+/UNplHnEt/v1jvQfyLs6ld97kO5Y222XvaGtZVgoZxMKybJNml6SID8WjaQJ2LRbftCMaTVYIGn3uucs2pHyFtIEtWdHonC1CdJk3x1sYyN0t/VmuN212ImnGSeOjWJOoAPxi334vFI5HuY9zqUKjJ5NPznOO/bPqAySPZ/FI20C9np4SlUtOaD2XHbhGalzAjHNFMOJSGv0FzLILiUOjS/RR/t+abhAW+IY3XQ5NW7QRS4/Q== plgnikolow@ui.cyf-kr.edu.pl"
+  public_key = "${file("${var.public_key_file}")}"
 }
 
 resource "exoscale_affinity" "ceph" {
@@ -37,8 +37,7 @@ resource "null_resource" "reboot" {
       "chmod +x part-vda2.sh",
       "sudo ./part-vda2.sh",
       "echo Rebooting...",
-      "sudo reboot",
-      "sleep 1"
+      "(sleep 2 && sudo reboot)&",
     ]
   }
 }
