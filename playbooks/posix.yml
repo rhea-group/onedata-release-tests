@@ -1,0 +1,19 @@
+- hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Create /posix
+      file:
+        path: /posix
+        mode: 0777
+        state: directory
+    - name: Create /posix/rt
+      file:
+        path: /posix/rt
+        mode: 0777
+        state: directory
+    - name: Create test files
+      become: no
+      shell: cd /posix/rt; truncate -s 2G f.{0..99}
+      
+      

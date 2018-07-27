@@ -140,10 +140,6 @@ resource "null_resource" "prepare-op-ceph" {
     content = "${join("\n", formatlist("%s ansible_host=%s",exoscale_compute.ceph-nodes.*.name,exoscale_compute.ceph-nodes.*.ip_address))}\n[mgt]\nlocalhost\n\n[mons]\n${join("\n", slice(exoscale_compute.ceph-nodes.*.name,0,var.ceph-mon_count))}\n\n[osds]\n${join("\n",formatlist("%s",exoscale_compute.ceph-nodes.*.name))}"
     destination = "inventory-ceph.ini"
   }
-  # provisioner "file" {
-  #   source = "etc.tgz"
-  #   destination = "etc.tgz"
-  # }
   provisioner "remote-exec" {
     inline = [
       "sudo sed -i 's/[0-9.]* .*-ceph-.*//' /etc/hosts",
@@ -158,10 +154,6 @@ resource "null_resource" "prepare-op-ceph" {
   }
   provisioner "remote-exec" {
     inline = [
-      # "tar zxvf playbooks.tgz",
-      # "tar zxvf etc.tgz",
-      # "sudo cp etc/ansible-hosts inventory-ceph.ini",
-      # "sudo cp etc/ssh_config /etc/ssh/ssh_config",
       "sudo yum -y install epel-release",
       "sudo yum -y install ansible",
       "sudo yum -y install python-pip",
@@ -193,11 +185,10 @@ resource "null_resource" "op-ceph-onedatify" {
   }
   provisioner "remote-exec" {
     inline = [  
-      "ansible-playbook playbooks/oneprovider.yml -i \"localhost,\" --extra-vars \"domain=${var.onezone} support_token=${var.support_token_ceph} storage_type=${var.storage_type_ceph} oppass=${var.oppass} support_size=${var.support_size_ceph}\"",
+      "ansible-playbook playbooks/oneprovider.yml -i \"localhost,\" --extra-vars \"domain=${var.onezone} support_token=${var.support_token_ceph} storage_type=${var.storage_type_ceph} oppass=${var.oppass} support_size=${var.support_size_ceph} sync=n import=noimort\"",
     ]
   }
 }
-
 
 resource "exoscale_security_group" "ceph" {
   name = "${var.project}-ceph"
