@@ -34,7 +34,7 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZTNiMzQ5OGFhNjIwNzdkMGM5YzgyMWZjNDEyNDM2YmEKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgy02502qw1v007xQ201Codcrgk6uWHeSepGA02oX5o1dX4DMEK"
+  default = "${ceph-support-token}"
 }
 
 variable "support_token_posix" {
