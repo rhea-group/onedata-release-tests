@@ -38,7 +38,7 @@ variable "support_token_ceph" {
 }
 
 variable "support_token_posix" {
-  default = "${ceph-support-posix}"
+  default = "${posix-support-token}"
 }
 
 variable "oppass" {
