@@ -112,13 +112,19 @@
       src: this-prepare-osds.sh
       dest: ~/this-prepare-osds.sh
       mode: 0500
-    when: vol_prefix != "/dev/nvme" and vol_prefix != "/dev/ram"
+    when: vol_prefix != "/dev/nvme" and vol_prefix != "/dev/ram" and vol_prefix != "/dev/vda2"
   - name: Copy this-prepare-osds.sh (NVMe)
     copy:
       src: this-prepare-osds-nvme.sh
       dest: ~/this-prepare-osds.sh
       mode: 0500
     when: vol_prefix == "/dev/nvme"
+  - name: Copy this-prepare-osds.sh (Exoscale)
+    copy:
+      src: this-prepare-osds-exo.sh
+      dest: ~/this-prepare-osds.sh
+      mode: 0500
+    when: vol_prefix == "/dev/vda2"
   - name: Copy this-prepare-osds.sh (RAM)
     copy:
       src: this-prepare-osds-ram.sh

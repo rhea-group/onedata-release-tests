@@ -2,7 +2,7 @@ resource "exoscale_compute" "op-posix" {
   depends_on = ["exoscale_affinity.op"]
   display_name =  "${var.project}-exo-op2"
   template = "Linux CentOS 7.4 64-bit"
-  zone = "${var.zone}"
+  zone = "${var.zone2}"
   size = "${var.op-flavor}"
   disk_size = 400
   key_pair = "${var.project}-exo"
