@@ -66,7 +66,7 @@ variable "onezone" {
 }
 
 variable "public_key_file" {
-  default = "/home/ubuntu/.ssh/id_rsa.pub"
+  default = "${public-key-path}"
 }
 
 variable "op-flavor" {
