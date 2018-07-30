@@ -38,7 +38,7 @@ variable "support_token_ceph" {
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMTNiNTRiMzY3MzNiOTZmN2JlMDAzMjhmMTcxNjAzYmEKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgAuH02KnhxV5c7uUXTLUKdE9cRC6DUvL3u69cpk501OSA8K"
+  default = "${ceph-support-posix}"
 }
 
 variable "oppass" {
