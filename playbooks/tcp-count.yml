@@ -1,0 +1,18 @@
+- hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Copy tcp-count.service
+      copy:
+        src: tcp-count.service
+        dest: /etc/systemd/system/tcp-count.service
+    - name: Copy tcp-count.py
+      copy:
+        src: tcp-count.py
+        dest: /usr/local/bin/tcp-count.py
+        mode: 0555
+    - name: Start tcp count service
+      systemd:
+        name: tcp-count
+        state: started
+        

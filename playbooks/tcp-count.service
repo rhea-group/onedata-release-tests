@@ -1,0 +1,8 @@
+[Unit]
+Description=TCP count service
+
+[Service]
+ExecStart=/usr/local/bin/tcp-count.py 1024 3333
+
+[Install]
+WantedBy=multi-user.target
