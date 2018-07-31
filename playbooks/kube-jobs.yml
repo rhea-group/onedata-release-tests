@@ -1,0 +1,6 @@
+- hosts: kube-master
+  tasks:
+    - name: Prepare jobs file
+      template:
+        src: kube-jobs/w-test-sysb-prep-job.j2
+        dest: w-test-sysb-prep-job.yaml

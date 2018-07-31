@@ -33,7 +33,7 @@ resource "exoscale_compute" "op-ceph" {
 }
 
 resource "null_resource" "bastion" {
-  depends_on = [ "null_resource.reboot" ]
+  # depends_on = [ "null_resource.reboot" ]
   connection {
     host = "${exoscale_compute.op-ceph.ip_address}"
     user     = "${var.ssh_user_name}"
@@ -105,7 +105,6 @@ resource "null_resource" "prepare-op-ceph" {
       "ssh -o StrictHostKeyChecking=no localhost date",
       "ansible-playbook -i \"localhost,\" playbooks/bastion.yml",
       "ansible-playbook -i \"localhost,\" playbooks/op-prereq.yml -e opname=${exoscale_compute.op-ceph.name} -e domain=${var.onezone}",
-      # "ansible-playbook playbooks/myceph/myceph.yml -i inventory-ceph.ini --extra-vars \"osd_disks=${var.disks-per-osd_count} vol_prefix=${var.vol_prefix}\" -f 50 -T 30",
     ]
   }
   provisioner "local-exec" {

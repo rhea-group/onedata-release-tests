@@ -1,0 +1,1873 @@
+{
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+            {
+                "collapsed": false,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 24,
+                "panels": [],
+                "title": "Oneclients",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 0,
+                    "y": 1
+                },
+                "id": 11,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "hide": false,
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.oneclient.mod.fuse.read.count))",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": false,
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.oneclient.mod.fuse.write.count))",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "oneclient-10.comp.oneclient.mod.fuse.read.count"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Oneclients aggregated FUSE transfer TOTAL",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "Bps",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 8,
+                    "y": 1
+                },
+                "id": 20,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.oneclient.mod.fuse.*.events))",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "perSecond(sumSeriesWithWildcards(oneclient-*.comp.oneclient.mod.fuse.*.events,0))",
+                        "textEditor": true
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Oneclient FUSE op/s",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 6,
+                    "w": 6,
+                    "x": 17,
+                    "y": 1
+                },
+                "id": 6,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": true,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "hide": false,
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "alias(countSeries(averageAbove(movingMax(oneclient-*.comp.helpers.mod.ceph.read.count, '5min'), 0)), 'Number of Ceph Readers')",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "alias(countSeries(averageAbove(movingMax(oneclient-*.comp.helpers.mod.ceph.write.count, '5min'), 0)), 'Number of Ceph Writers')",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "alias(countSeries(averageAbove(movingMax(oneclient-*.comp.helpers.mod.s3.read.count, '5min'), 0)), 'Number of S3 Readers')",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "D",
+                        "target": "alias(countSeries(averageAbove(movingMax(oneclient-*.comp.helpers.mod.ceph.write.count, '5min'), 0)), 'Number of S3 Writers')",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "E",
+                        "target": "alias(countSeries(averageAbove(movingMax(oneclient-*.comp.helpers.mod.cephrados.read.count, '5min'), 0)), 'Number of CephRados Readers')",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "F",
+                        "target": "alias(countSeries(averageAbove(movingMax(oneclient-*.comp.helpers.mod.cephrados.write.count, '5min'), 0)), 'Number of CephRados Writers')",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "G",
+                        "target": "alias(countSeries(oneclient-*.comp.helpers.mod.cephrados.write.count), 'Number of CephRados Writers')",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "H",
+                        "target": "alias(countSeries(oneclient-*.comp.helpers.mod.cephrados.read.count), 'Number of CephRados Readers')",
+                        "textEditor": false
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "# Reading oneclients",
+                "tooltip": {
+                    "shared": false,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": "0",
+                        "show": true
+                    },
+                    {
+                        "decimals": null,
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "collapsed": false,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 7
+                },
+                "id": 26,
+                "panels": [],
+                "title": "Collectd",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 0,
+                    "y": 8
+                },
+                "id": 2,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": true,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "refId": "A",
+                        "target": "scale(sumSeriesWithWildcards(sumSeriesWithWildcards(collectd.*.cpu-*.cpu-{user,system}, 2), 2), 0.01)",
+                        "textEditor": false
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "CPU User+System",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "none",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 6,
+                    "y": 8
+                },
+                "id": 3,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": true,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "refId": "A",
+                        "target": "collectd.*.memory.memory-used"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Memory",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "bytes",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 12,
+                    "y": 8
+                },
+                "id": 4,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": true,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "sumSeriesWithWildcards(collectd.*.interface-eth*.if_octets.*, 4)",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "sumSeriesWithWildcards(collectd.*.interface-ens*.if_octets.*, 4)",
+                        "textEditor": true
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Network",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "Bps",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 18,
+                    "y": 8
+                },
+                "id": 5,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": true,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "refId": "A",
+                        "target": "sumSeriesWithWildcards(collectd.*.interface-ib0.if_octets.*, 4)"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Network ib0",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "Bps",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 0,
+                    "y": 13
+                },
+                "id": 28,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "sumSeriesWithWildcards(sumSeriesWithWildcards(collectd.*.disk-vda.disk_octets.*, 4), 2)",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "collectd.*.disk-*.disk_ops.*"
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "collectd.*.disk-*.pending_operations"
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "D",
+                        "target": "sumSeriesWithWildcards(sumSeriesWithWildcards(collectd.*.disk-vdb.disk_octets.*, 4), 2)",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "E",
+                        "target": "sumSeriesWithWildcards(collectd.*.disk-nvm*.disk_octets.*, 4)",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "F",
+                        "target": "sumSeriesWithWildcards(collectd.*.disk-vda.disk_octets.*, 4)",
+                        "textEditor": true
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Disk transfer rate",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "Bps",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 6,
+                    "y": 13
+                },
+                "id": 29,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "sumSeriesWithWildcards(sumSeriesWithWildcards(collectd.*.disk-*.disk_octets.*, 4), 2)",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": false,
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "collectd.*.disk-*.disk_ops.*"
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "collectd.*.disk-*.pending_operations"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Disk operations rate",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "ops",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 12,
+                    "y": 13
+                },
+                "id": 30,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "sumSeriesWithWildcards(sumSeriesWithWildcards(collectd.*.disk-*.disk_octets.*, 4), 2)",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "collectd.*.disk-*.disk_ops.*"
+                    },
+                    {
+                        "hide": false,
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "collectd.*.disk-*.pending_operations"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Disk queue",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "none",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 5,
+                    "w": 6,
+                    "x": 18,
+                    "y": 13
+                },
+                "id": 31,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "hideEmpty": true,
+                    "hideZero": true,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "sumSeriesWithWildcards(sumSeriesWithWildcards(collectd.*.disk-*.disk_octets.*, 4), 2)",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "collectd.*.disk-*.disk_ops.*"
+                    },
+                    {
+                        "hide": false,
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "scale(collectd.*.disk-*.disk_io_time.io_time, 0.1)"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Disk load",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "percent",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "collapsed": false,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 18
+                },
+                "id": 13,
+                "panels": [],
+                "repeat": null,
+                "title": "Ceph",
+                "type": "row"
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 6,
+                    "w": 10,
+                    "x": 0,
+                    "y": 19
+                },
+                "id": 1,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.ceph.write.count))",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": false,
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.ceph.read.count))",
+                        "textEditor": true
+                    },
+                    {
+                        "hide": true,
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "example_key.onedata.comp.op_worker.mod"
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "D",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.cephrados.read.count))",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "E",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.cephrados.write.count))",
+                        "textEditor": true
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Oneclients aggregated transfer rate Driver Ceph",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "Bps",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "gridPos": {
+                    "h": 6,
+                    "w": 6,
+                    "x": 11,
+                    "y": 19
+                },
+                "id": 33,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "refCount": 0,
+                        "refId": "A",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.cephrados.read.events))",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "B",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.cephrados.write.events))",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "C",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.ceph.write.events))",
+                        "textEditor": true
+                    },
+                    {
+                        "refCount": 0,
+                        "refId": "D",
+                        "target": "perSecond(sumSeries(oneclient-*.comp.helpers.mod.ceph.read.events))",
+                        "textEditor": true
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Helper IOPS",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": "go-carbon",
+                "fill": 1,
+                "gridPos": {
+                    "h": 6,
+                    "w": 6,
+                    "x": 18,
+                    "y": 19
+                },
+                "id": 8,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "links": [],
+                "nullPointMode": "null",
+                "percentage": false,
+                "pointradius": 5,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "refId": "A",
+                        "target": "sumSeries(oneclient-wr-test-*.comp.helpers.mod.ceph.write.count)",
+                        "textEditor": false
+                    },
+                    {
+                        "hide": false,
+                        "refId": "B",
+                        "target": "sumSeries(oneclient-wr-test-*.comp.helpers.mod.ceph.read.count)",
+                        "textEditor": false
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeShift": null,
+                "title": "Data processed so far in the experiment Ceph",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "decbytes",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "collapsed": true,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 25
+                },
+                "id": 14,
+                "panels": [
+                    {
+                        "aliasColors": {},
+                        "bars": false,
+                        "dashLength": 10,
+                        "dashes": false,
+                        "datasource": null,
+                        "fill": 1,
+                        "gridPos": {
+                            "h": 7,
+                            "w": 8,
+                            "x": 0,
+                            "y": 3
+                        },
+                        "id": 9,
+                        "legend": {
+                            "avg": false,
+                            "current": false,
+                            "max": false,
+                            "min": false,
+                            "show": false,
+                            "total": false,
+                            "values": false
+                        },
+                        "lines": true,
+                        "linewidth": 1,
+                        "links": [],
+                        "nullPointMode": "null",
+                        "percentage": false,
+                        "pointradius": 5,
+                        "points": false,
+                        "renderer": "flot",
+                        "seriesOverrides": [],
+                        "spaceLength": 10,
+                        "stack": false,
+                        "steppedLine": false,
+                        "targets": [
+                            {
+                                "refId": "A",
+                                "target": "perSecond(sumSeries(oneclient-wr-test-*.comp.helpers.mod.s3.write.count))",
+                                "textEditor": false
+                            },
+                            {
+                                "hide": false,
+                                "refId": "B",
+                                "target": "perSecond(sumSeries(oneclient-wr-test-*.comp.helpers.mod.s3.read.count))",
+                                "textEditor": false
+                            },
+                            {
+                                "refId": "C",
+                                "target": ""
+                            }
+                        ],
+                        "thresholds": [],
+                        "timeFrom": null,
+                        "timeShift": null,
+                        "title": "Oneclients aggregated transfer rate Driver S3",
+                        "tooltip": {
+                            "shared": true,
+                            "sort": 0,
+                            "value_type": "individual"
+                        },
+                        "type": "graph",
+                        "xaxis": {
+                            "buckets": null,
+                            "mode": "time",
+                            "name": null,
+                            "show": true,
+                            "values": []
+                        },
+                        "yaxes": [
+                            {
+                                "format": "Bps",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            },
+                            {
+                                "format": "short",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            }
+                        ]
+                    },
+                    {
+                        "aliasColors": {},
+                        "bars": false,
+                        "dashLength": 10,
+                        "dashes": false,
+                        "datasource": null,
+                        "fill": 1,
+                        "gridPos": {
+                            "h": 7,
+                            "w": 8,
+                            "x": 8,
+                            "y": 3
+                        },
+                        "id": 10,
+                        "legend": {
+                            "avg": false,
+                            "current": false,
+                            "max": false,
+                            "min": false,
+                            "show": false,
+                            "total": false,
+                            "values": false
+                        },
+                        "lines": true,
+                        "linewidth": 1,
+                        "links": [],
+                        "nullPointMode": "null",
+                        "percentage": false,
+                        "pointradius": 5,
+                        "points": false,
+                        "renderer": "flot",
+                        "seriesOverrides": [],
+                        "spaceLength": 10,
+                        "stack": false,
+                        "steppedLine": false,
+                        "targets": [
+                            {
+                                "refId": "A",
+                                "target": "sumSeries(oneclient-wr-test-*.comp.helpers.mod.s3.write.count)",
+                                "textEditor": false
+                            },
+                            {
+                                "hide": false,
+                                "refId": "B",
+                                "target": "sumSeries(oneclient-wr-test-*.comp.helpers.mod.s3.read.count)",
+                                "textEditor": false
+                            }
+                        ],
+                        "thresholds": [],
+                        "timeFrom": null,
+                        "timeShift": null,
+                        "title": "Oneclients aggregated data S3",
+                        "tooltip": {
+                            "shared": true,
+                            "sort": 0,
+                            "value_type": "individual"
+                        },
+                        "type": "graph",
+                        "xaxis": {
+                            "buckets": null,
+                            "mode": "time",
+                            "name": null,
+                            "show": true,
+                            "values": []
+                        },
+                        "yaxes": [
+                            {
+                                "format": "decbytes",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            },
+                            {
+                                "format": "short",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            }
+                        ]
+                    }
+                ],
+                "repeat": null,
+                "title": "S3",
+                "type": "row"
+            },
+            {
+                "collapsed": true,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 26
+                },
+                "id": 15,
+                "panels": [
+                    {
+                        "aliasColors": {},
+                        "bars": false,
+                        "dashLength": 10,
+                        "dashes": false,
+                        "datasource": "go-carbon",
+                        "fill": 1,
+                        "gridPos": {
+                            "h": 7,
+                            "w": 24,
+                            "x": 0,
+                            "y": 5
+                        },
+                        "id": 7,
+                        "legend": {
+                            "avg": false,
+                            "current": false,
+                            "max": false,
+                            "min": false,
+                            "show": false,
+                            "total": false,
+                            "values": false
+                        },
+                        "lines": true,
+                        "linewidth": 1,
+                        "links": [],
+                        "nullPointMode": "null",
+                        "percentage": false,
+                        "pointradius": 5,
+                        "points": false,
+                        "renderer": "flot",
+                        "seriesOverrides": [],
+                        "spaceLength": 10,
+                        "stack": true,
+                        "steppedLine": false,
+                        "targets": [
+                            {
+                                "hide": false,
+                                "refId": "A",
+                                "target": "perSecond(oneclient-wr-test-*.comp.helpers.mod.ceph.write.count)",
+                                "textEditor": true
+                            },
+                            {
+                                "hide": false,
+                                "refId": "B",
+                                "target": "perSecond(oneclient-wr-test-*.comp.helpers.mod.ceph.read.count)",
+                                "textEditor": true
+                            }
+                        ],
+                        "thresholds": [],
+                        "timeFrom": null,
+                        "timeShift": null,
+                        "title": "Oneclients aggregated transfer rate Ceph",
+                        "tooltip": {
+                            "shared": false,
+                            "sort": 1,
+                            "value_type": "individual"
+                        },
+                        "type": "graph",
+                        "xaxis": {
+                            "buckets": null,
+                            "mode": "time",
+                            "name": null,
+                            "show": true,
+                            "values": []
+                        },
+                        "yaxes": [
+                            {
+                                "format": "Bps",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            },
+                            {
+                                "format": "short",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            }
+                        ]
+                    }
+                ],
+                "repeat": null,
+                "title": "Dashboard Row",
+                "type": "row"
+            },
+            {
+                "collapsed": true,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 27
+                },
+                "id": 16,
+                "panels": [
+                    {
+                        "aliasColors": {},
+                        "bars": false,
+                        "dashLength": 10,
+                        "dashes": false,
+                        "datasource": "go-carbon",
+                        "fill": 1,
+                        "gridPos": {
+                            "h": 7,
+                            "w": 24,
+                            "x": 0,
+                            "y": 6
+                        },
+                        "id": 12,
+                        "legend": {
+                            "avg": false,
+                            "current": false,
+                            "max": false,
+                            "min": false,
+                            "show": false,
+                            "total": false,
+                            "values": false
+                        },
+                        "lines": true,
+                        "linewidth": 1,
+                        "links": [],
+                        "nullPointMode": "null",
+                        "percentage": false,
+                        "pointradius": 5,
+                        "points": false,
+                        "renderer": "flot",
+                        "seriesOverrides": [],
+                        "spaceLength": 10,
+                        "stack": true,
+                        "steppedLine": false,
+                        "targets": [
+                            {
+                                "hide": false,
+                                "refId": "A",
+                                "target": "perSecond(oneclient-wr-test-*.comp.helpers.mod.s3.write.count)",
+                                "textEditor": true
+                            },
+                            {
+                                "hide": false,
+                                "refId": "B",
+                                "target": "perSecond(oneclient-wr-test-*.comp.helpers.mod.s3.read.count)",
+                                "textEditor": true
+                            }
+                        ],
+                        "thresholds": [],
+                        "timeFrom": null,
+                        "timeShift": null,
+                        "title": "Oneclients aggregated transfer rate S3",
+                        "tooltip": {
+                            "shared": false,
+                            "sort": 1,
+                            "value_type": "individual"
+                        },
+                        "type": "graph",
+                        "xaxis": {
+                            "buckets": null,
+                            "mode": "time",
+                            "name": null,
+                            "show": true,
+                            "values": []
+                        },
+                        "yaxes": [
+                            {
+                                "format": "Bps",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            },
+                            {
+                                "format": "short",
+                                "label": null,
+                                "logBase": 1,
+                                "max": null,
+                                "min": null,
+                                "show": true
+                            }
+                        ]
+                    }
+                ],
+                "repeat": null,
+                "title": "Dashboard Row",
+                "type": "row"
+            }
+        ],
+        "refresh": "30s",
+        "schemaVersion": 16,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": []
+        },
+        "time": {
+            "from": "now-5m",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "5s",
+                "10s",
+                "30s",
+                "1m",
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "2h",
+                "1d"
+            ],
+            "time_options": [
+                "5m",
+                "15m",
+                "1h",
+                "6h",
+                "12h",
+                "24h",
+                "2d",
+                "7d",
+                "30d"
+            ]
+        },
+        "timezone": "",
+        "title": "oc-op-rt-v4",
+        "uid": "bq7t8Czij",
+        "version": 8
+    },
+    "meta": {
+        "canAdmin": true,
+        "canEdit": true,
+        "canSave": true,
+        "canStar": true,
+        "created": "2018-07-13T17:42:24Z",
+        "createdBy": "admin",
+        "expires": "0001-01-01T00:00:00Z",
+        "folderId": 0,
+        "folderTitle": "General",
+        "folderUrl": "",
+        "hasAcl": false,
+        "isFolder": false,
+        "provisioned": false,
+        "slug": "oc-op-rt-v4",
+        "type": "db",
+        "updated": "2018-07-14T06:03:47Z",
+        "updatedBy": "admin",
+        "url": "/d/bq7t8Czik/oc-op-rt-v4",
+        "version": 7
+    }
+}

@@ -103,27 +103,27 @@ resource "null_resource" "provision-work" {
 #   # }
 # }
 
-resource "null_resource" "provision-ansible" {
-  depends_on = ["exoscale_compute.kube-work", "exoscale_compute.kube-ctlr", "null_resource.provision-work", ]
-  connection {
-      host     = "${exoscale_compute.op-ceph.ip_address}"
-      user     = "${var.ssh_user_name}"
-      agent = true
-  }
-  provisioner "remote-exec" {
-    inline = [
-      # "sudo yum -y install ansible",
-      # "sudo yum -y install epel-release",
-      # "sudo yum -y install python-pip",
-      # "sudo pip install --upgrade jinja2",
-      "sudo yum -y install python-netaddr",
-      "sudo yum -y install git",
-    ]
-  }
-}
+# resource "null_resource" "provision-ansible" {
+#   depends_on = ["exoscale_compute.kube-work", "exoscale_compute.kube-ctlr", "null_resource.provision-work", ]
+#   connection {
+#       host     = "${exoscale_compute.op-ceph.ip_address}"
+#       user     = "${var.ssh_user_name}"
+#       agent = true
+#   }
+#   provisioner "remote-exec" {
+#     inline = [
+#       # "sudo yum -y install ansible",
+#       # "sudo yum -y install epel-release",
+#       # "sudo yum -y install python-pip",
+#       # "sudo pip install --upgrade jinja2",
+#       # "sudo yum -y install python-netaddr",
+#       # "sudo yum -y install git",
+#     ]
+#   }
+# }
 
 resource "null_resource" "provision-kubespray" {
-  depends_on = ["exoscale_compute.kube-work", "exoscale_compute.kube-ctlr", "null_resource.provision-work", "null_resource.provision-ansible"]
+  depends_on = ["exoscale_compute.kube-work", "exoscale_compute.kube-ctlr", "null_resource.provision-work", "null_resource.prepare-op-ceph"]
   connection {
       host     = "${exoscale_compute.op-ceph.ip_address}"
       user     = "${var.ssh_user_name}"
@@ -148,8 +148,8 @@ resource "null_resource" "provision-kubespray" {
       # "sudo yum -y install epel-release",
       # "sudo yum -y install python-pip",
       # "sudo pip install --upgrade jinja2",
-      # "sudo yum -y install python-netaddr",
-      # "sudo yum -y install git",
+      "sudo yum -y install python-netaddr",
+      "sudo yum -y install git",
       # "sudo systemctl disable firewalld",
       # "sudo systemctl stop firewalld",
       "grep ansible_host inventory-kube.ini | cut -f2 -d= | xargs -I{} ssh -o StrictHostKeyChecking=no {} hostname",
@@ -220,20 +220,33 @@ resource "null_resource" "provision-miscafter" {
       user     = "${var.ssh_user_name}"
       agent = true
   }
-  provisioner "file" {
-    source = "../playbooks/kube-miscafter-exo.yml"
-    destination = "/home/centos/playbooks/kube-miscafter-exo.yml"
-  }  
-  provisioner "file" {
-    source = "../playbooks.tgz"
-    destination = "playbooks.tgz"
-  }
+  # provisioner "file" {
+  #   source = "../playbooks/kube-miscafter-exo.yml"
+  #   destination = "/home/centos/playbooks/kube-miscafter-exo.yml"
+  # }  
+  # provisioner "file" {
+  #   source = "../playbooks.tgz"
+  #   destination = "playbooks.tgz"
+  # }
   provisioner "remote-exec" {
     inline = [
       "tar zxvf playbooks.tgz",
       "ansible-playbook -i inventory-kube.ini playbooks/kube-miscafter-exo.yml -e dnszone=${var.dnszone} -e project=${var.project}",
+    ]
+  }
+}
+
+resource "null_resource" "provision-kube-jobs" {
+  depends_on = ["null_resource.provision-grafana", "null_resource.provision-miscafter"]
+  connection {
+      host     = "${exoscale_compute.op-ceph.ip_address}"
+      user     = "${var.ssh_user_name}"
+      agent = true
+  }
+  provisioner "remote-exec" {
+    inline = [
       "ansible-playbook -i \"localhost,\" playbooks/tcp-count.yml",
-      "ansible-playbook -i inventory-kube.ini playbooks/kube-jobs.yml -e \"grafana_ip=127.0.0.1 oneclient_oneprovider_host=${exoscale_compute.op-ceph.name}.${var.onezone} oneclient_access_token=${var.access_token} space_name=${var.space_name} oneclient_image=${var.oneclient_image} count_server_ip=${exoscale_compute.op-ceph.ip_address}\"",
+      "ansible-playbook -i inventory-kube.ini playbooks/kube-jobs.yml -e \"grafana_ip=${exoscale_compute.grafana.ip_address} oneclient_oneprovider_host=${exoscale_compute.op-ceph.name}.${var.onezone} oneclient_access_token=${var.access_token} space_name=${var.space_name} oneclient_image=${var.oneclient_image} count_server_ip=${exoscale_compute.op-ceph.ip_address}\"",
     ]
   }
 }

@@ -173,3 +173,6 @@ variable "work_flavor_name" {
   default = "Huge"
 }
 
+variable "grafana_flavor_name" {
+  default = "Large"
+}

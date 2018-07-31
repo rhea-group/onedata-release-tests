@@ -1,0 +1,27 @@
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Check for docker
+      stat:
+        path: /usr/bin/docker
+      register: ds
+    - name: Install docker
+      shell: curl --tlsv1 -sSL https://get.docker.com/ | sh
+      when: ds.stat.exists == False
+    - name: Start docker
+      systemd:
+        name: docker
+        state: started
+    - name: Stop go-graphite container
+      shell: sudo docker stop go-graphite
+    - name: Remove go-graphite container
+      shell: sudo docker rm go-graphite      
+    - name: Start go-graphite container
+      shell: sudo docker run -d --name go-graphite --restart=always -p 80:80 -p 2003-2004:2003-2004 -p 3000:3000 gographite/go-graphite
+    - name: Wait for grafana
+      wait_for:
+        host: "{{ansible_default_ipv4.address}}"
+        port: 80
+    - name: Upload grafana dashboard
+      shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/dashboards/db -X POST -d @oc-op-rt-v4.json -H 'Content-Type: application/json'"
