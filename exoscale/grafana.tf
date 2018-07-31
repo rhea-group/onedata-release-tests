@@ -10,6 +10,10 @@ resource "exoscale_compute" "grafana" {
   # affinity_groups = ["${var.project}-op"]
 }
 
+output "Grafana IP address" {
+  value = "${exoscale_compute.grafana.ip_address}"
+}
+
 resource "null_resource" "provision-grafana" {
   depends_on = [ "exoscale_compute.grafana"]
   connection {
