@@ -6,16 +6,11 @@ resource "exoscale_compute" "grafana" {
   size = "${var.grafana_flavor_name}"
   disk_size = 100
   key_pair = "${var.project}-exo"
-  security_groups = ["${var.project}-ceph","${var.project}-op"]
-  # affinity_groups = ["${var.project}-op"]
-}
-
-output "Grafana IP address" {
-  value = "${exoscale_compute.grafana.ip_address}"
+  security_groups = ["${exoscale_security_group.ceph.name}","${exoscale_security_group.op.name}"]
 }
 
 resource "null_resource" "provision-grafana" {
-  depends_on = [ "exoscale_compute.grafana"]
+  depends_on = [ "exoscale_compute.grafana", "null_resource.prepare-op-ceph"]
   connection {
     host = "${exoscale_compute.op-ceph.ip_address}"
     user     = "${var.ssh_user_name}"
@@ -34,3 +29,8 @@ resource "null_resource" "provision-grafana" {
     ]
   }
 }
+
+output "Grafana IP address" {
+  value = "${exoscale_compute.grafana.ip_address}"
+}
+

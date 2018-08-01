@@ -14,14 +14,21 @@
         name: docker
         state: started
     - name: Stop go-graphite container
-      shell: sudo docker stop go-graphite
+      shell: docker stop go-graphite
+      register: gg
+      failed_when: '"No such container" not in gg.stderr and gg.rc != 0'
     - name: Remove go-graphite container
-      shell: sudo docker rm go-graphite      
+      shell: docker rm go-graphite
+      when: gg.rc == 0
     - name: Start go-graphite container
-      shell: sudo docker run -d --name go-graphite --restart=always -p 80:80 -p 2003-2004:2003-2004 -p 3000:3000 gographite/go-graphite
+      shell: docker run -d --name go-graphite --restart=always -p 80:80 -p 2003-2004:2003-2004 -p 3000:3000 gographite/go-graphite
     - name: Wait for grafana
       wait_for:
         host: "{{ansible_default_ipv4.address}}"
         port: 80
-    - name: Upload grafana dashboard
-      shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/dashboards/db -X POST -d @oc-op-rt-v4.json -H 'Content-Type: application/json'"
+    - name: Copy dashboard
+      copy:
+        src: oc-op-rt-v4.json
+        dest: oc-op-rt-v4.json
+    - name: Upload grafana dashboard 
+      shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/dashboards/db -X POST -d @oc-op-rt-v4.json -H 'Content-Type: application/json' > curl.out 2>curl.err" 

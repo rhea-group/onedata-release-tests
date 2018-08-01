@@ -6,8 +6,8 @@ resource "exoscale_compute" "ceph-nodes" {
   size = "${var.ceph-flavor}"
   disk_size = 400
   key_pair = "${var.project}-exo"
-  security_groups = ["${var.project}-ceph"]
-  affinity_groups = ["${var.project}-ceph"]
+  security_groups = ["${exoscale_security_group.ceph.name}"]
+  affinity_groups = ["${exoscale_affinity.ceph.name}"]
   user_data = <<EOF
 #cloud-config
 

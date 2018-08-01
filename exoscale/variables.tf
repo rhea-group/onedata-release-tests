@@ -56,11 +56,11 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZGRlYjc5ZmJhYmQyNTQ5MjlmYmRmM2RjZWU4ZGVlNDQKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgGrZzSppUnZn900evNQWoNE1ZHrmlGOPfDbi01rxueOJ8YK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZmQ3YjAyNDljZGQ1ZmQ1NTEyOTIxZjM5ZGFjYTNkNzkKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUggnEmJc4YSvn7xAHjKmXFGy01D2oqJv02KMmsXDcfHfqaEK"
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgNTFmZTdkNjQyNGNmMGFjZmI2ZWMxY2Y00Mjg1YWRkOGMKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg6zygFCspNuSpqJIHz00NtzQHuxSonkqn1eTDpjpORaVEK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgN2NiNjYyMjMyOTUzNDAxZjYwNmU00YWNmYjY1ZGNlYTEKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgKD4Ni1ImPix015BGcUr1jmQt6BP28Knfm2qE402LNgm01kK"
 }
 
 variable "oppass" {
@@ -142,10 +142,6 @@ variable "dnszone" {
   default = "local"
 }
 
-# variable "email" {
-# #  default = ""
-# }
-
 # ### The following variables can optionally be set. Reasonable defaults are provided.
 
 # ### k8s cluster settings
@@ -160,10 +156,6 @@ variable "kube-work_count" {
 }
 
 # ### VM (Instance) Settings
-# # The flavor name used for Ceph monitors and OSDs. 
-# variable "vpn_flavor_name" {
-#   default = "h1.large.4"
-# }
 
 variable "ctlr_flavor_name" {
   default = "Extra-large"
