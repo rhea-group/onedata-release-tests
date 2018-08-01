@@ -10,6 +10,7 @@
 - Edit exo.tvars and place your credentials.
 - Get a space support token from onezone, (e.g., from https://onedata.hnsc.otc-service.com) and place it in variables.tf as support-token-ceph.
 - Get your access token from onezone and put it in exo.tvars
+- Put your new onepanel password in exo.tvars
 - Create a space and put its name in variables.tf
 - If you need more VMs or different VM flavors modify defaults in variables.tf
 - Then run:
