@@ -14,11 +14,11 @@ These scripts deploy onedata testbed consisting of:
 
 # Deploying onedata on exoscale
 - run ssh-agent and add your key. It will further be used to login into the created VMs.
-- Edit exo.tvars and place your credentials.
+- Create a space and put its name in variables.tf
 - Get a space support token from onezone, (e.g., from https://onedata.hnsc.otc-service.com) and place it in variables.tf as support-token-ceph.
+- Edit exo.tvars and place your exoscale credentials.
 - Get your access token from onezone and put it in exo.tvars
 - Put your new onepanel password in exo.tvars
-- Create a space and put its name in variables.tf
 - If you need more VMs or different VM flavors modify defaults in variables.tf
 - Then run:
 
@@ -43,12 +43,19 @@ kubectl create -f w-test-sysb-prep-job.yaml
 ```
 After the test is finished and data analized the job should be deleted to free resources for another test. Use `kubectl delete job <job-name>` to do so.
 
-## Running test
+## Running tests
 Use kubectl `create -f <job-definition.yaml>` to run one of the above access scenarios.
+Before repeating the remote access test make sure the replica of rt directory on the first ceph-supported provider has been invalidated. This can done from the Web GUI.  
 
 ## Observing metrics
 The performance metrics can be observed with grafana. To do so go to the grafana IP address using a web browser and login using admin:admin. 
 
+## Upgrading onedata
+- Login to each oneprovider as user centos and run:
+```
+onedatify upgrade -v <new-version>
+```
+- Login to k8s master and replace the oneclient image in the yaml files for each job 
 ## Example command flow 
 
 ### Prepare ssh 

@@ -12,6 +12,7 @@
     - name: Start docker
       systemd:
         name: docker
+        enabled: yes
         state: started
     - name: Stop go-graphite container
       shell: docker stop go-graphite

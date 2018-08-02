@@ -150,10 +150,17 @@ resource "null_resource" "provision-miscafter" {
       "ansible-playbook -i inventory-kube.ini playbooks/kube-miscafter-exo.yml -e dnszone=${var.dnszone} -e project=${var.project}",
     ]
   }
+  provisioner "local-exec" {
+    command = "ssh-keygen -R ${exoscale_compute.kube-ctlr.0.ip_address}"
+  }
+  provisioner "local-exec" {
+    command = "ssh -o StrictHostKeyChecking=no ${var.ssh_user_name}@${exoscale_compute.kube-ctlr.0.ip_address} date"
+  }
+
 }
 
 resource "null_resource" "provision-kube-jobs" {
-  depends_on = ["null_resource.provision-grafana", "null_resource.provision-miscafter"]
+  depends_on = ["null_resource.provision-grafana", "null_resource.provision-miscafter", "null_resource.prepare-op-ceph"]
   connection {
       host     = "${exoscale_compute.op-ceph.ip_address}"
       user     = "${var.ssh_user_name}"

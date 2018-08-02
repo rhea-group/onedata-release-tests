@@ -108,7 +108,7 @@ resource "null_resource" "prepare-op-ceph" {
 }
 
 resource "null_resource" "op-ceph-onedatify" { 
-  depends_on = ["null_resource.prepare-op-ceph"]
+  depends_on = ["null_resource.prepare-op-ceph","null_resource.deploy-ceph"]
   connection {
     host = "${exoscale_compute.op-ceph.ip_address}"
     user     = "${var.ssh_user_name}"
