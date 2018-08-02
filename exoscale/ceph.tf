@@ -6,8 +6,8 @@ resource "exoscale_compute" "ceph-nodes" {
   size = "${var.ceph-flavor}"
   disk_size = 400
   key_pair = "${var.project}-exo"
-  security_groups = ["${var.project}-ceph"]
-  affinity_groups = ["${var.project}-ceph"]
+  security_groups = ["${exoscale_security_group.ceph.name}"]
+  affinity_groups = ["${exoscale_affinity.ceph.name}"]
   user_data = <<EOF
 #cloud-config
 
@@ -87,16 +87,6 @@ resource "null_resource" "deploy-ceph" {
   }
   provisioner "remote-exec" {
     inline = [
-      # "sudo yum -y install epel-release",
-      # "sudo yum -y install ansible",
-      # "sudo yum -y install python-pip",
-      # "sudo pip install pexpect",
-      # "sudo pip install --upgrade jinja2", 
-      # "tar zxvf playbooks.tgz",
-      # "ssh-keygen -R localhost",
-      # "ssh -o StrictHostKeyChecking=no localhost date",
-      # "ansible-playbook -i \"localhost,\" playbooks/bastion.yml",
-      # "ansible-playbook -i \"localhost,\" playbooks/op-prereq.yml -e opname=${exoscale_compute.op-ceph.name} -e domain=${var.onezone}",
       "ansible-playbook playbooks/myceph/myceph.yml -i inventory-ceph.ini --extra-vars \"osd_disks=${var.disks-per-osd_count} vol_prefix=${var.vol_prefix}\" -f 50 -T 30",
     ]
   }

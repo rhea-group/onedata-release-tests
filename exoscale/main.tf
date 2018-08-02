@@ -21,19 +21,18 @@ resource "exoscale_affinity" "op" {
 }
 
 resource "exoscale_compute" "op-ceph" {
-  depends_on = ["exoscale_affinity.op"]
+  # depends_on = ["exoscale_affinity.op"]
   display_name =  "${var.project}-exo-op"
   template = "Linux CentOS 7.4 64-bit"
   zone = "${var.zone}"
   size = "${var.op-flavor}"
   disk_size = 100
   key_pair = "${var.project}-exo"
-  security_groups = ["${var.project}-ceph","${var.project}-op"]
-  affinity_groups = ["${var.project}-op"]
+  security_groups = ["${exoscale_security_group.op.name}", "${exoscale_security_group.ceph.name}"]
+  affinity_groups = ["${exoscale_affinity.op.name}"]
 }
 
 resource "null_resource" "bastion" {
-  depends_on = [ "null_resource.reboot" ]
   connection {
     host = "${exoscale_compute.op-ceph.ip_address}"
     user     = "${var.ssh_user_name}"
@@ -43,15 +42,8 @@ resource "null_resource" "bastion" {
   provisioner "remote-exec" {
     inline = [
       "sudo sed -i 's/AllowTcpForwarding no/AllowTcpForwarding yes/' /etc/ssh/sshd_config",
-      #"sudo sed -i 's/PermitTunnel no/PermitTunnel yes/' /etc/ssh/sshd_config",
       "sudo systemctl restart sshd",
       "sleep 5",
-      # "sudo yum -y install ansible",
-      # "sudo yum -y install epel-release",
-      # "sudo yum -y install python-pip",
-      # "sudo pip install --upgrade jinja2",
-      # "sudo systemctl stop firewalld",
-      # "sudo systemctl disable firewalld",
     ]
   }
 }
@@ -63,7 +55,7 @@ resource "null_resource" "local-setup" {
 }
 
 resource "null_resource" "prepare-op-ceph" {
-  depends_on = ["null_resource.local-setup","null_resource.provision-ceph-node"]
+  depends_on = ["null_resource.local-setup"]
   connection {
     host = "${exoscale_compute.op-ceph.ip_address}"
     user     = "${var.ssh_user_name}"
@@ -105,7 +97,6 @@ resource "null_resource" "prepare-op-ceph" {
       "ssh -o StrictHostKeyChecking=no localhost date",
       "ansible-playbook -i \"localhost,\" playbooks/bastion.yml",
       "ansible-playbook -i \"localhost,\" playbooks/op-prereq.yml -e opname=${exoscale_compute.op-ceph.name} -e domain=${var.onezone}",
-      # "ansible-playbook playbooks/myceph/myceph.yml -i inventory-ceph.ini --extra-vars \"osd_disks=${var.disks-per-osd_count} vol_prefix=${var.vol_prefix}\" -f 50 -T 30",
     ]
   }
   provisioner "local-exec" {
@@ -117,7 +108,7 @@ resource "null_resource" "prepare-op-ceph" {
 }
 
 resource "null_resource" "op-ceph-onedatify" { 
-  depends_on = ["null_resource.prepare-op-ceph"]
+  depends_on = ["null_resource.prepare-op-ceph","null_resource.deploy-ceph"]
   connection {
     host = "${exoscale_compute.op-ceph.ip_address}"
     user     = "${var.ssh_user_name}"

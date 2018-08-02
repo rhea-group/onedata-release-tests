@@ -1,0 +1,15 @@
+- hosts: kube-master
+  tasks:
+    - name: Prepare jobs file
+      template:
+        src: "{{item.src}}"
+        dest: "{{item.dest}}"
+      with_items:
+        - {src: kube-jobs/w-test-sysb-prep-job.j2, dest: w-test-sysb-prep-job.yaml}
+        - {src: kube-jobs/w-test-sysb-seqwr-job.j2, dest: w-test-sysb-seqwr-job.yaml}
+        - {src: kube-jobs/w-test-sysb-rndwr-job.j2, dest: w-test-sysb-rndwr-job.yaml}
+        - {src: kube-jobs/r-test-sysb-seqrd-job.j2, dest: r-test-sysb-seqrd-job.yaml}
+        - {src: kube-jobs/r-test-sysb-rndrd-job.j2, dest: r-test-sysb-rndrd-job.yaml}
+        - {src: kube-jobs/r-test-dd-seqrd-job.j2, dest: r-test-dd-seqrd-job.yaml}
+        - {src: kube-jobs/r-test-ioping-rndrd-job.j2, dest: r-test-ioping-rndrd-job.yaml}
+        

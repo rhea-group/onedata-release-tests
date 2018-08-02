@@ -1,13 +1,13 @@
 resource "exoscale_compute" "op-posix" {
-  depends_on = ["exoscale_affinity.op"]
+#  depends_on = ["exoscale_affinity.op"]
   display_name =  "${var.project}-exo-op2"
   template = "Linux CentOS 7.4 64-bit"
   zone = "${var.zone2}"
   size = "${var.op-flavor}"
   disk_size = 400
   key_pair = "${var.project}-exo"
-  security_groups = ["${var.project}-op"]
-  affinity_groups = ["${var.project}-op"]
+  security_groups = ["${exoscale_security_group.op.name}"]
+  affinity_groups = ["${exoscale_affinity.op.name}"]
 }
 
 resource "null_resource" "prepare-op-posix" {

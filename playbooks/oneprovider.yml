@@ -25,8 +25,8 @@
       command: ceph -s -c ~/ceph.conf --keyring ~/ceph.client.admin.keyring
       register: res
       until: res.rc == 0
-      retries: 20
-      delay: 6
+      retries: 30
+      delay: 10
       changed_when: false
       when: storage_type == "ceph"
     - name: Get client.admin keyring

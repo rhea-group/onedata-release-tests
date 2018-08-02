@@ -1,0 +1,62 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: w-test-sysb
+spec:
+  #backoffLimit: 0
+  parallelism: 50
+  #completions: 0
+  template:
+    metadata:
+      labels:
+        name: w-test-sysb
+      annotations:
+    spec:
+      hostNetwork: true
+      restartPolicy: Never
+      imagePullSecrets:
+      - name: regsecret
+      containers:
+      - name: write
+        image: {{oneclient_image}}
+        env:
+          - name: ONECLIENT_INSECURE
+            value: "true"
+          - name: ONECLIENT_PROVIDER_HOST
+            value: {{oneclient_oneprovider_host}}
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: ONECLIENT_ACCESS_TOKEN
+            value: {{oneclient_access_token}}
+        command:
+         - "sh"
+         - "-c"
+         - >
+           echo ---------------------------------------------------------------------; 
+           apt update;
+           apt -y install netcat libluajit-5.1-dev libck-dev ;
+           MYN=`nc {{count_server_ip}} 3333`;
+           MYN=`expr $MYN % 50`;
+           echo "MYN="$MYN;
+           until oneclient "/mnt/oneclient" --force-direct-io -v 1 --force-fullblock-read --rndrd-prefetch-cluster-window=2007040 --rndrd-prefetch-cluster-block-threshold=10 --provider-timeout=800 --monitoring-type graphite --monitoring-level-full --monitoring-period 5 --graphite-url tcp://{{grafana_ip}}:2003 --graphite-namespace-prefix "oneclient-${MYN}";
+           do echo "Waiting for oneprovider (i.e. successful mount)";
+           sleep 30;
+           done;
+           SPACE={{space_name}}/ceph/sysb.$MYN;
+           mkdir -p /mnt/oneclient/$SPACE;
+           echo $SPACE;
+           cd /mnt/oneclient/$SPACE;
+           sysbench fileio --validate=off --file-num=4 --file-block-size=4K --file-total-size=8G --num-threads=1 --time=3600 --max-requests=0 --file-test-mode=rndwr --report-interval=60 run ;   
+           sleep 360000;
+        readinessProbe:
+          exec:
+            command:
+             - "sh"
+             - "-c"
+             - >
+                mount | grep /mnt/oneclient ;
+        securityContext:
+          privileged: true
+

@@ -142,10 +142,6 @@ variable "dnszone" {
   default = "local"
 }
 
-# variable "email" {
-# #  default = ""
-# }
-
 # ### The following variables can optionally be set. Reasonable defaults are provided.
 
 # ### k8s cluster settings
@@ -160,10 +156,6 @@ variable "kube-work_count" {
 }
 
 # ### VM (Instance) Settings
-# # The flavor name used for Ceph monitors and OSDs. 
-# variable "vpn_flavor_name" {
-#   default = "h1.large.4"
-# }
 
 variable "ctlr_flavor_name" {
   default = "Extra-large"
@@ -173,3 +165,6 @@ variable "work_flavor_name" {
   default = "Huge"
 }
 
+variable "grafana_flavor_name" {
+  default = "Large"
+}
