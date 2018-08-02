@@ -38,17 +38,6 @@ resource "null_resource" "prepare-op-posix" {
     ]
   }
   provisioner "local-exec" {
-    command = "cat >> /etc/ssh/ssh_config <<EOF
-               Host ${exoscale_compute.op-posix.ip_address}
-                 StrictHostKeyChecking no
-                 UserKnownHostsFile=/dev/null
-
-               EOF"
-  }
-  provisioner "local-exec" {
-    command = "ssh-keygen -R ${exoscale_compute.op-posix.ip_address}"
-  }
-  provisioner "local-exec" {
     command = "ssh -o StrictHostKeyChecking=no ${var.ssh_user_name}@${exoscale_compute.op-posix.ip_address} date"
   }
 }
