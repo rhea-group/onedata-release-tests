@@ -91,6 +91,14 @@ resource "null_resource" "deploy-ceph" {
     ]
   }
   provisioner "local-exec" {
+    command = "cat >> /etc/ssh/ssh_config <<EOF
+			Host ${exoscale_compute.ceph-nodes.0.ip_address}
+			  StrictHostKeyChecking no
+			  UserKnownHostsFile=/dev/null
+
+			EOF"
+  }
+  provisioner "local-exec" {
     command = "ssh-keygen -R ${exoscale_compute.ceph-nodes.0.ip_address}"
   }
   provisioner "local-exec" {
