@@ -1,4 +1,4 @@
 exoscale_api_key = "my-api-key"
 exoscale_secret_key = "my-secret-key"
-oppass = "my-onepanel-pass"
-access_token = ""
+oppass = "${onepanel-pass}"
+access_token = "${onezone-access-token}"

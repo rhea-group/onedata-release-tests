@@ -7,12 +7,11 @@ variable "exoscale_secret_key" {
 }
 
 variable "zone" {
-  default = "de-fra-1"
+  default = "${source-zone}"
 }
 
 variable "zone2" {
-#  default = "de-fra-1"
-  default = "ch-gva-2"
+  default = "${k8s-zone}"
 }
 
 # The user name for loging into the VMs.
@@ -35,7 +34,7 @@ variable "project" {
 ### Onedata related variables
 
 variable "space_name" {
-  default = "odt"
+  default = "${space-name}"
 }
 
 variable "access_token" {
@@ -152,7 +151,7 @@ variable "kube-ctlr_count" {
 
 # The number of workers of Kube cluster. 
 variable "kube-work_count" {
-  default = "2"
+  default = "${kube-worker-count}"
 }
 
 # ### VM (Instance) Settings
@@ -162,7 +161,7 @@ variable "ctlr_flavor_name" {
 }
 
 variable "work_flavor_name" {
-  default = "Huge"
+  default = "${kube-worker-flavor}"
 }
 
 variable "grafana_flavor_name" {
