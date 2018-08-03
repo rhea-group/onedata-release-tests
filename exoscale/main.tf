@@ -100,9 +100,6 @@ resource "null_resource" "prepare-op-ceph" {
     ]
   }
   provisioner "local-exec" {
-    command = "ssh-keygen -R ${exoscale_compute.op-ceph.ip_address}"
-  }
-  provisioner "local-exec" {
     command = "ssh -o StrictHostKeyChecking=no ${var.ssh_user_name}@${exoscale_compute.op-ceph.ip_address} date"
   }
 }

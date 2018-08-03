@@ -151,9 +151,6 @@ resource "null_resource" "provision-miscafter" {
     ]
   }
   provisioner "local-exec" {
-    command = "ssh-keygen -R ${exoscale_compute.kube-ctlr.0.ip_address}"
-  }
-  provisioner "local-exec" {
     command = "ssh -o StrictHostKeyChecking=no ${var.ssh_user_name}@${exoscale_compute.kube-ctlr.0.ip_address} date"
   }
 
