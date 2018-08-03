@@ -45,7 +45,7 @@ spec:
            SPACE={{space_name}}/rt;
            echo $SPACE;
            cd /mnt/oneclient/$SPACE;
-	   ioping -c 10000 -i 0 -S 10G f.$MYN ; 
+           ioping -c 10000 -i 0 -S 10G f.$MYN ; 
            sleep 360000;
         readinessProbe:
           exec:
