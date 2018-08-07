@@ -18,7 +18,7 @@
       command: "host {{ansible_hostname}}.{{domain}}"
       register: subdomain
       ignore_errors: yes
-    - debug: msg="The subdomain is used. Remove it from your onezone or use another name for project"
+    - debug: msg="The subdomain is {{ansible_hostname}}.{{domain}} used. Remove it from your onezone or use another name for project"
       failed_when: subdomain.rc == 0
       when: subdomain.rc == 0
     - name: Wait for Ceph
@@ -42,10 +42,24 @@
         dest: /tmp/od.sh
         url: https://get.onedata.org/onedatify.sh
         mode: 0755
+    # - name: Create /root/.docker dir
+    #   become: yes
+    #   file:
+    #     path: /root/.docker
+    #     state: directory
+    # - name: Copy json.config
+    #   become: yes
+    #   copy:
+    #     src: config.json
+    #     dest: /root/.docker/config.json
     - name: Run onedatify with expect
+      environment:
+        # ONEDATIFY_ONEPROVIDER_VERSION: "onedata/oneprovider:{{onedata_version}}"
+        ONEDATIFY_ONEPROVIDER_VERSION: "{{onedata_version}}"
+        ONEDATIFY_VERSION: "{{onedatify_version}}"
       expect:
         timeout: 600
-        command: /tmp/od.sh "https://{{domain}}" "{{support_token}}" "{{import}}"
+        command: sh -c "/tmp/od.sh "https://{{domain}}" "{{support_token}}" "{{import}}"
         echo: yes
         responses:
           'Do you want to continue \(y/n\)\?\:': 'y'
@@ -80,7 +94,7 @@
     - name: Copy onedatify output
       copy:
         content: "{{cmd_output.stdout}}"
-        dest: "onedatify.stdout"
+        dest: "{{ansible_user_dir}}/onedatify.stdout"
     - name: Copy op-worker-overlay.config
       become: yes
       copy:

@@ -1,3 +1,10 @@
+- hosts: all
+  tasks:
+    - name: Add public keys
+      become: no
+      authorized_key:
+        user: "{{ansible_env.USER}}"
+        key: "{{ lookup('file', 'pubkeys') }}"
 
 - hosts: all
   become: yes
@@ -56,12 +63,17 @@
       stat:
         path: /dev/nvme0n1
       register: nvme_stat
+    - name: Check for mounted NVMe
+      shell: mount | grep nvme0n1
+      register: mntchk
+      failed_when: false
     - name: Make filesystem on NVMe
       filesystem:
         dev: /dev/nvme0n1
         fstype: xfs
+        force: yes
         opts: -f
-      when: nvme_stat.stat.exists == True
+      when: nvme_stat.stat.exists == True and mntchk.rc != 0
     - name: Mount /opt/onedata
       mount:
         path: /opt/onedata
@@ -88,8 +100,6 @@
       hostname:
         name: "{{ opname }}.{{ domain }}"
     - name: Set FQDN in /etc/hosts
-      become: yes
-      become_user: root
       lineinfile:
         path: /etc/hosts
         regexp: "^{{ ansible_default_ipv4.address }}"
@@ -122,8 +132,6 @@
         path: /usr/bin/docker-compose
       register: cs      
     - name: Install docker-compose
-      become: yes
-      become_user: root
       shell: |
         curl --tlsv1 -sSL -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/bin/docker-compose
         chmod +x /usr/bin/docker-compose

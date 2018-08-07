@@ -34,7 +34,7 @@ spec:
          - >
            echo ---------------------------------------------------------------------; 
            apt update;
-           apt -y install netcat libluajit-5.1-dev libck-dev ;
+           apt -y install netcat libluajit-5.1-dev libck-dev ioping ;
            MYN=`nc {{count_server_ip}} 3333`;
            MYN=`expr $MYN % 50`;
            echo "MYN="$MYN;
@@ -45,7 +45,7 @@ spec:
            SPACE={{space_name}}/rt;
            echo $SPACE;
            cd /mnt/oneclient/$SPACE;
-	   ioping -c 10000 -i 0 -S 10G f.$MYN ; 
+           ioping -c 10000 -i 0 -S 10G f.$MYN ; 
            sleep 360000;
         readinessProbe:
           exec:

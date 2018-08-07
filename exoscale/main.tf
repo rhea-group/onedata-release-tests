@@ -170,3 +170,12 @@ resource "exoscale_security_group_rule" "onepanel" {
   start_port = 9443
   end_port = 9443
 }
+
+resource "exoscale_security_group_rule" "iperf" {
+  security_group_id = "${exoscale_security_group.op.id}"
+  protocol = "TCP"
+  type = "INGRESS"
+  cidr = "0.0.0.0/0"  # "::/0" for IPv6
+  start_port = 5201
+  end_port = 5201
+}
