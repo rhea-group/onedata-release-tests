@@ -35,15 +35,27 @@ variable "project" {
 ### Onedata related variables
 
 variable "space_name" {
-  default = "odt"
+  default = "odt-exo"
 }
 
 variable "access_token" {
   default = ""
 }
 
+variable "onedatify_install_script_version" {
+  default = "18.02.0.rc10"
+}
+
+variable "onedatify_oneprovider_version" {
+  default = "onedata/oneprovider:18.02.0-rc10"
+}
+
 variable "oneclient_image" {
-  default = "onedata/oneclient:18.02.0-rc9"
+  default = "onedata/oneclient:18.02.0-rc10"
+}
+
+variable "oneclient_package" {
+  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc10-1.el7.centos.x86_64.rpm"
 }
 
 ### Oneprovider
@@ -56,11 +68,11 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZWQ2OWQyZDZmZWU4YzdhNTk2NTY00ZDc2ODAzZTZmZDgKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgYEi8CQRtb3kRiU6ysQR6Uzku2xzia00Q2BzNY1a22BSMK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMTQ4N2E5OTY5ZTQyZjRhOTNkNTcyYjEzMTAyMzU3ZWQKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg5Fba01LpgEN4AT26YK9CaKDJrguIXrvPdlbLexTYWOAIK"
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgN2ZmY2FjMmY1YzMwZGQ5Yjk5Mjc1MTJjMjMwZWIzODQKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgse4cnqyZ01jsz00imh01U1l1t97OrujafDkbSoPAJTlLyIK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMGE1NmZmNjE4N2IxNTA2NzIwYjUwZGNmODg00NmJiOWQKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg019qEuZVnNfKCWbIykZBAiZyddWQmHKrVdaSs01PtdskoK"
 }
 
 variable "oppass" {

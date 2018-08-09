@@ -54,9 +54,8 @@
     #     dest: /root/.docker/config.json
     - name: Run onedatify with expect
       environment:
-        ONEDATIFY_ONEPROVIDER_VERSION: "onedata/oneprovider:{{onedata_version}}"
-        # ONEDATIFY_ONEPROVIDER_VERSION: "{{onedata_version}}"
-        # ONEDATIFY_VERSION: "{{onedatify_version}}"
+        ONEDATIFY_INSTALL_SCRIPT_VERSION: "{{onedatify_install_script_version}}"
+        ONEDATIFY_ONEPROVIDER_VERSION: "{{onedatify_oneprovider_version}}"
       expect:
         timeout: 600
         command: sh -c "/tmp/od.sh "https://{{domain}}" "{{support_token}}" "{{import}}"

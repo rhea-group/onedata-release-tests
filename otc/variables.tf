@@ -24,13 +24,29 @@ variable "access_token" {
   default = ""
 }
 
-variable "onedata_version" {
-  default = "18.02.0-rc10"
+# variable "onedata_version" {
+#   default = "18.02.0-rc10"
+# }
+
+variable "onedatify_install_script_version" {
+  default = "18.02.0.rc10"
 }
 
-variable "onedatify_version" {
-  default = "18.02.0-rc9"
+variable "onedatify_oneprovider_version" {
+  default = "onedata/oneprovider:18.02.0-rc10"
 }
+
+variable "oneclient_image" {
+  default = "onedata/oneclient:18.02.0-rc10"
+}
+
+variable "oneclient_package" {
+  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc10-1.el7.centos.x86_64.rpm"
+}
+
+# variable "onedatify_version" {
+#   default = "18.02.0-rc9"
+# }
 # variable "oneclient_image" {
 #   default = "onedata/oneclient:18.02.0-rc9"
 # }
@@ -55,11 +71,11 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgNzg3NGY4YjQwYzM4YjVjOWRjNzNkZTk4M2IxMDQyYjcKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgvrJ6kqWUozLxFqLkiqeDtlU00qPPZn9q2BGJtfiAoVrUK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZDYwNmEzZTE3MWI5ZDc5NzNiYTY2M2IyNjJkYzk4MDkKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgA4kH902TBZ3lcv12B9P98600krvADb01OGUkoB01lmoB4hAK"
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZjMxZDA5N2IzYzY4ZDcyM2QyM2VjZmFiZDU3ZDMyZTIKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgVYUFoOJnSE6G20121orQS8Lb5S02mV00hg1yjyw6VuGj01QK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMTc00Y2ViMGZlMDJhYTRjYWIxMmEyMjRhOTIxMTg00MjcKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgTHZOim91ZFEPrpgznn4U9HN7hPXHkjBYxG6d3802DmgIK"
 }
 
 variable "oppass" {

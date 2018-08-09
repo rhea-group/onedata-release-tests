@@ -117,7 +117,22 @@ resource "null_resource" "op-ceph-onedatify" {
   }
   provisioner "remote-exec" {
     inline = [  
-      "ansible-playbook playbooks/oneprovider.yml -i \"localhost,\" --extra-vars \"domain=${var.onezone} support_token=${var.support_token_ceph} storage_type=${var.storage_type_ceph} oppass=${var.oppass} support_size=${var.support_size_ceph} sync=n import=noimort\"",
+      "ansible-playbook playbooks/oneprovider.yml -i \"localhost,\" --extra-vars \"domain=${var.onezone} support_token=${var.support_token_ceph} storage_type=${var.storage_type_ceph} oppass=${var.oppass} support_size=${var.support_size_ceph} sync=n import=noimort onedatify_install_script_version=${var.onedatify_install_script_version} onedatify_oneprovider_version=${var.onedatify_oneprovider_version}\"",
+    ]
+  }
+}
+
+resource "null_resource" "op-ceph-oneclient" { 
+  depends_on = ["null_resource.op-ceph-onedatify"]
+  connection {
+    host = "${exoscale_compute.op-ceph.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [  
+      "ansible-playbook playbooks/oneclient.yml -i \"localhost,\" --extra-vars \"oneprovider=${exoscale_compute.op-ceph.name}.${var.onezone} access_token=${var.access_token} oneclient_package=${var.oneclient_package} \"",
     ]
   }
 }

@@ -56,7 +56,7 @@ resource "null_resource" "op-posix-onedatify" {
   provisioner "remote-exec" {
     inline = [
       "ansible-playbook playbooks/posix.yml -i \"localhost,\"",
-      "ansible-playbook playbooks/oneprovider.yml -i \"localhost,\" --extra-vars \"domain=${var.onezone} support_token=${var.support_token_posix} storage_type=${var.storage_type_posix} oppass=${var.oppass} support_size=${var.support_size_posix} sync=y import= \"",
+      "ansible-playbook playbooks/oneprovider.yml -i \"localhost,\" --extra-vars \"domain=${var.onezone} support_token=${var.support_token_posix} storage_type=${var.storage_type_posix} oppass=${var.oppass} support_size=${var.support_size_posix} sync=y import= onedatify_install_script_version=${var.onedatify_install_script_version} onedatify_oneprovider_version=${var.onedatify_oneprovider_version}\"",
     ]
   }
 }
