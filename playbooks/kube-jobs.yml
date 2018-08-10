@@ -12,16 +12,16 @@
         - r-test-sysb-rndrd-job
         - r-test-dd-seqrd-job
         - r-test-ioping-rndrd-job
-    - name: Create /root/.docker dir
-      become: yes
-      file:
-        path: /root/.docker
-        state: directory
-    - name: Copy json.config
-      become: yes
-      copy:
-        src: config.json
-        dest: /root/.docker/config.json
+    # - name: Create /root/.docker dir
+    #   become: yes
+    #   file:
+    #     path: /root/.docker
+    #     state: directory
+    # - name: Copy json.config
+    #   become: yes
+    #   copy:
+    #     src: config.json
+    #     dest: /root/.docker/config.json
     - name: Add public keys
       authorized_key:
         user: "{{ansible_env.USER}}"
