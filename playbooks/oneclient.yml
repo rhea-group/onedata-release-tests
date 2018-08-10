@@ -1,0 +1,19 @@
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Install OC package
+      become: yes
+      yum:
+        name: "{{oneclient_package}}"
+    - name: Set FUSE allow_other
+      become: yes
+      lineinfile:
+        regexp: ".*user_allow_other"
+        line: user_allow_other
+        path: /etc/fuse.conf
+    - name: Create /tmp/mntoc
+      file:
+        name: /tmp/mntoc
+        state: directory
+    - name: Mount oneclient 
+      shell: "oneclient -H {{oneprovider}} -t {{access_token}} /tmp/mntoc -i -o allow_other --force-direct-io --force-fullblock-read"
