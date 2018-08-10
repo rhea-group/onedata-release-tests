@@ -2,14 +2,29 @@
   tasks:
     - name: Prepare jobs file
       template:
-        src: "{{item.src}}"
-        dest: "{{item.dest}}"
+        src: "kube-jobs/{{item}}.j2"
+        dest: "{{ansible_user_dir}}/{{item}}.yaml"
       with_items:
-        - {src: kube-jobs/w-test-sysb-prep-job.j2, dest: w-test-sysb-prep-job.yaml}
-        - {src: kube-jobs/w-test-sysb-seqwr-job.j2, dest: w-test-sysb-seqwr-job.yaml}
-        - {src: kube-jobs/w-test-sysb-rndwr-job.j2, dest: w-test-sysb-rndwr-job.yaml}
-        - {src: kube-jobs/r-test-sysb-seqrd-job.j2, dest: r-test-sysb-seqrd-job.yaml}
-        - {src: kube-jobs/r-test-sysb-rndrd-job.j2, dest: r-test-sysb-rndrd-job.yaml}
-        - {src: kube-jobs/r-test-dd-seqrd-job.j2, dest: r-test-dd-seqrd-job.yaml}
-        - {src: kube-jobs/r-test-ioping-rndrd-job.j2, dest: r-test-ioping-rndrd-job.yaml}
-        
+        - w-test-sysb-prep-job
+        - w-test-sysb-seqwr-job
+        - w-test-sysb-rndwr-job
+        - r-test-sysb-seqrd-job
+        - r-test-sysb-rndrd-job
+        - r-test-dd-seqrd-job
+        - r-test-ioping-rndrd-job
+    - name: Create /root/.docker dir
+      become: yes
+      file:
+        path: /root/.docker
+        state: directory
+    - name: Copy json.config
+      become: yes
+      copy:
+        src: config.json
+        dest: /root/.docker/config.json
+    - name: Add public keys
+      authorized_key:
+        user: "{{ansible_env.USER}}"
+        key: "{{ lookup('file', 'pubkeys') }}"
+
+      

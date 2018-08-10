@@ -1,0 +1,5 @@
+otc_domain_name = "OTC-EU-DE-00000000001000018693"
+otc_username = "your-otc-username"
+otc_password = "your-otc-password"
+oppass = "my-onepanel-pass"
+access_token = ""

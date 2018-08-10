@@ -1,4 +1,4 @@
-- hosts: mons osds
+- hosts: mgt mons osds
   tasks:
     #- name: Print hostvars
     #  debug:
@@ -11,7 +11,7 @@
       become_user: root
       run_once: yes
       lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_ib0.ipv4.address }} {{item}}" state=present
-      when: hostvars[item].ansible_ib0 is defined and hostvars[item].ansible_ib0.ipv4 is not defined
+      when: hostvars[item].ansible_ib0 is defined and hostvars[item].ansible_ib0.ipv4 is defined
       with_items: "{{ groups['mons'] + groups['osds'] }}"
       delegate_to: 127.0.0.1
     - name: "Remove failed hosts from inventory file"

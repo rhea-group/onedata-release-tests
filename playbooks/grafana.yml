@@ -30,6 +30,8 @@
     - name: Copy dashboard
       copy:
         src: oc-op-rt-v4.json
-        dest: oc-op-rt-v4.json
+        dest: "/tmp/oc-op-rt-v4.json"
+      become: no
     - name: Upload grafana dashboard 
-      shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/dashboards/db -X POST -d @oc-op-rt-v4.json -H 'Content-Type: application/json' > curl.out 2>curl.err" 
+      shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/dashboards/db -X POST -d @/tmp/oc-op-rt-v4.json -H 'Content-Type: application/json' > curl.out 2>curl.err" 
+      become: no

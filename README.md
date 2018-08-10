@@ -12,13 +12,24 @@ These scripts deploy onedata testbed consisting of:
 - ssh-agent configured
 - access to a onezone (as a user)
 
-# Deploying onedata on exoscale
-- run ssh-agent and add your key. It will further be used to login into the created VMs.
-- Create a space and put its name in variables.tf
-- Get a space support token from onezone, (e.g., from https://onedata.hnsc.otc-service.com) and place it in variables.tf as support-token-ceph.
+# Deploying onedata
+## Exoscale
+- Change directory to exoscale
 - Edit exo.tvars and place your exoscale credentials.
 - Get your access token from onezone and put it in exo.tvars
 - Put your new onepanel password in exo.tvars
+
+## OTC
+- Change directory to otc
+- Edit otc.tvars and place your exoscale credentials.
+- Get your access token from onezone and put it in otc.tvars
+- Put your new onepanel password in otc.tvars
+
+## Exoscale and OTC
+
+- run ssh-agent and add your key. It will further be used to login into the created VMs.
+- Create a space and put its name in variables.tf
+- Get a space support token from onezone, (e.g., from https://onedata.hnsc.otc-service.com) and place it in variables.tf as support-token-ceph.
 - If you need more VMs or different VM flavors modify defaults in variables.tf
 - Then run:
 

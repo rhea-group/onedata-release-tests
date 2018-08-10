@@ -1,0 +1,186 @@
+#!/usr/bin/python
+
+import paramiko
+import os
+import subprocess
+import shlex
+import sys
+import time
+
+#import utils
+
+from timeit import default_timer as timer
+
+verbose = False
+
+
+def remoteCommand(ssh, str,verbose=False):
+    stdin, stdout, stderr = ssh.exec_command(str,600)
+    stdin.close()
+    for line in iter(lambda: stdout.readline(2048), ""):
+        if verbose :
+            print(line.encode('utf-8')),
+            sys.stdout.flush()
+    for line in iter(lambda: stderr.readline(2048), ""):
+        if verbose :
+            print(line.encode('utf-8')),
+            sys.stdout.flush()
+    return stdout.channel.recv_exit_status()
+
+
+def waitFile(site, file, status, ssh, filesize = 0):
+    t = 0
+    timeout = 6000
+    start = timer()
+    while True:
+        executeCommand(site, "ls -la " + os.path.dirname(file), ssh)
+        res, elapsed = executeCommand(site, "ls -la " + file, ssh)
+        if res == 0 and status == "exists":
+            while True:
+                res,elapsed = executeCommand(site, "ls -l --block-size=1 " + file + "| awk '{ print $5 }' | grep " + str(abs(filesize)), ssh)
+                if res == 0:
+                    break
+                else:
+                    time.sleep(0.1)
+                    t = t + 1
+                    if t > timeout:
+                        sys.exit("Wait file status failed " + file)
+            break
+        elif res != 0 and status == "not exists":
+            break
+        else:
+            time.sleep(0.1)
+            t = t + 1
+            if t > timeout:
+                sys.exit("Wait file status failed " + file)
+    end = timer()
+    return end - start
+
+
+def executeCommand(site, command, ssh,verbose=False):
+    if verbose:
+        print site, command
+
+    if ">" not in command and not verbose:
+        command+=" >/dev/null 2>&1"
+    start = timer()
+    if site == "L":
+        stat=os.system(command)
+#        args = shlex.split(command)
+#        FNULL = open(os.devnull, 'w')
+#        proc = subprocess.Popen(args, stdout=FNULL, stderr=subprocess.STDOUT)
+#        proc.wait()
+#        stat = proc.returncode
+    elif site == "R":
+        stat = remoteCommand(ssh,command,verbose)
+    end = timer()
+    return stat, end - start
+
+
+def createFileCommand(dir,fname, size):
+    if size > 0:
+        return "dd if=/dev/zero of=" + fname + " iflag=count_bytes count=" + str(size)
+#        return "/usr/sbin/xfs_mkfile "+ str(size) + fname
+
+    fdir = os.path.dirname(fname)
+    image_name = ""
+    if  size == -99971392:
+        image_name = "yakser/h5sim_small"
+    elif size == -999696128:
+        image_name = "yakser/h5sim_med"
+    elif size == -9996937344:
+        image_name = "yakser/h5sim"
+    return "sudo docker run -u `id -u`:`id -g` -v " + fdir + ":/data "+image_name+" run_write > "+fdir+"/out_write_"+dir
+
+
+def readFileCommand(dir,fname, size, attempt):
+    if size > 0:
+        return "cat " + fname + " >/dev/null"
+
+    fdir = os.path.dirname(fname)
+
+    if  size == -99971392:
+        image_name = "yakser/h5sim_small"
+    elif size == -999696128:
+        image_name = "yakser/h5sim_med"
+    elif size == -9996937344:
+        image_name = "yakser/h5sim"
+
+    return "sudo docker run -u `id -u`:`id -g` -v " + fdir + ":/data " + image_name + " run_read > "+fdir+"/out_read_"+dir+"_"+str(attempt)
+    #return fdir+"/Run_read > "+fdir+"/out_read_"+dir
+
+
+def test(nFiles,suffix, fileSize, dir, pathR, pathL, user, ip):
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    # mykey = paramiko.RSAKey.from_private_key_file("/home/centos/.ssh/id_rsa")
+    # mykey = paramiko.RSAKey.from_private_key_file(utils.privatekeyfile)
+
+    # ssh.connect(ip, username=user, pkey=mykey,gss_auth=False)
+    ssh.connect(ip)
+
+    resname = {'L': 'local', 'R': 'remote'}
+
+    fname = {}
+    fname["L"] = pathL + "/"+ suffix
+    fname["R"] = pathR + "/"+ suffix
+    print fname
+
+    executeCommand("L", "rm -rf " + fname["L"], ssh)
+    executeCommand("R", "rm -rf " + fname["R"], ssh)
+    waitFile("R", fname["R"], "not exists", ssh)
+    waitFile("L", fname["L"], "not exists", ssh)
+
+    print "File created " + resname[dir[0]] + "ly in:",
+    elapsed = executeCommand(dir[0], createFileCommand(dir[0],fname[dir[0]], fileSize), ssh)[1]
+    print "%.2f s" % (elapsed)
+
+    print "File visible " + resname[dir[1]] + "ly after:",
+    timeVis = waitFile(dir[1], fname[dir[1]], "exists", ssh,fileSize)
+    print "%.2f s" % timeVis
+    print "-" * 80
+
+    realSize = os.path.getsize(fname["L"])
+
+    realSize_MB= realSize/ 1024 / 1024
+
+
+    print "Access file " + resname[dir[1]] + "ly:",
+    timeAccess = executeCommand(dir[1], readFileCommand(dir[1],fname[dir[1]], fileSize,1), ssh,True)[1]
+    print "%.2f s, BW: %d Mb/s, BW_Eff: %d Mb/s" % (timeAccess, int(realSize_MB / float(timeAccess) * 8),int(realSize_MB / float(timeAccess + timeVis) * 8))
+    print "-" * 80
+    print "Access file " + resname[dir[1]] + "ly second time:",
+    elapsed = executeCommand(dir[1], readFileCommand(dir[1],fname[dir[1]], fileSize,2), ssh)[1]
+    print "%.2f s, BW: %d Mb/s" % (elapsed, int(realSize_MB / float(elapsed) * 8))
+    print "-" * 80
+    print "Remove file " + resname[dir[1]] + "ly in:",
+    elapsed = executeCommand(dir[1], "rm -rf " + fname[dir[1]], ssh)[1]
+    print "%.2f s" % (elapsed)
+    print "File dissapears " + resname[dir[0]] + "ly after:",
+    print "%.2f s" % waitFile(dir[0], fname[dir[0]], "not exists", ssh)
+
+
+if __name__ == "__main__":
+
+    if len(sys.argv) < 5:
+        print ("Usage: " + sys.argv[0] + " <ip> <remotedir> <localdir> <fsize, <=0 to use HDF5 Docker image>")
+        exit(1)
+
+    ip = sys.argv[1]
+    remotedir = sys.argv[2]
+    localdir = sys.argv[3]
+    fsize = int(sys.argv[4])
+
+    nfiles = 1
+    verbose = False
+    print "=" * 80
+    print "local to remote ..."
+    print "=" * 80
+
+
+    test(nfiles, "output.h5", fsize, "LR", remotedir, localdir, "linux", ip)
+    # print "=" * 80
+    # print "remote to local ..."
+    # print "=" * 80
+    # test(nfiles, "output.h5", fsize, "RL", remotedir, localdir, "linux", ip)
