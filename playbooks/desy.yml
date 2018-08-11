@@ -4,6 +4,7 @@
       template:
         src: "desy-replica-agent.j2"
         dest: "{{ansible_user_dir}}/desy-replica-agent.sh"
+        mode: 0755
     - name: Copy replicate-agent.sh
       copy:
         src: replicate_agent.sh
