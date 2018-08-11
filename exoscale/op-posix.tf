@@ -60,3 +60,18 @@ resource "null_resource" "op-posix-onedatify" {
     ]
   }
 }
+
+resource "null_resource" "op-posix-desy" { 
+  depends_on = ["null_resource.op-posix-onedatify"]
+  connection {
+    host = "${exoscale_compute.op-posix.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/desy.yml -i \"localhost,\" --extra-vars \" access_token=${var.access_token} onezone=${var.onezone} space_name=${var.space_name} source_provider=${exoscale_compute.op-ceph.name}.${var.onezone} destination_provider=${exoscale_compute.op-posix.name}.${var.onezone} remote_host_ip=${exoscale_compute.op-ceph.ip_address}\"",
+    ]
+  }
+}
