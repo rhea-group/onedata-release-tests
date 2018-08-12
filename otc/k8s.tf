@@ -42,6 +42,7 @@ resource "openstack_networking_port_v2" "ctlr-port" {
   security_group_ids = [
     # "${openstack_compute_secgroup_v2.secgrp_jmp.id}",
     "${openstack_compute_secgroup_v2.kube.id}",
+    "${openstack_compute_secgroup_v2.ceph.id}"
   ]
   admin_state_up     = "true"
   fixed_ip           = {
@@ -180,6 +181,7 @@ resource "openstack_networking_port_v2" "work-port" {
   name = "${var.project}-work-${format("%02d", count.index+1)}"
   security_group_ids = [
     "${openstack_compute_secgroup_v2.kube.id}",
+    "${openstack_compute_secgroup_v2.ceph.id}",
   ]
   admin_state_up     = "true"
   fixed_ip           = {
@@ -283,7 +285,7 @@ resource "null_resource" "provision-kube-jobs" {
   provisioner "remote-exec" {
     inline = [
       "ansible-playbook -i \"localhost,\" playbooks/tcp-count.yml",
-      "ansible-playbook -i inventory-kube.ini playbooks/kube-jobs.yml -e \"grafana_ip=${openstack_networking_floatingip_v2.grafana.address} oneclient_oneprovider_host=${openstack_compute_instance_v2.op-ceph.name}.${var.onezone} oneclient_access_token=${var.access_token} space_name=${var.space_name} oneclient_image=${var.oneclient_image} count_server_ip=${openstack_networking_floatingip_v2.op-ceph.address}\"",
+      "ansible-playbook -i inventory-kube.ini playbooks/kube-jobs.yml -e \"grafana_ip=${openstack_compute_instance_v2.grafana.access_ip_v4} oneclient_oneprovider_host=${openstack_compute_instance_v2.op-ceph.name}.${var.onezone} oneclient_access_token=${var.access_token} space_name=${var.space_name} oneclient_image=${var.oneclient_image} count_server_ip=${openstack_compute_instance_v2.op-ceph.access_ip_v4}\"",
     ]
   }
 }

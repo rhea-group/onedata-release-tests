@@ -59,7 +59,8 @@ variable "op_flavor_name" {
 
 variable "op-posix_flavor_name" {
   #default = "s2.medium.8"
-  default = "h1.2xlarge.8"
+  #default = "h1.2xlarge.8"
+  default = "h2.3xlarge.10"  
 }
 
 variable "op-posix-vol_size" {
@@ -71,11 +72,11 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZDYwNmEzZTE3MWI5ZDc5NzNiYTY2M2IyNjJkYzk4MDkKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgA4kH902TBZ3lcv12B9P98600krvADb01OGUkoB01lmoB4hAK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgYzgwOGE1M2Y1MzViNmJjODJmMGRkMGQ00ZGNhOWFkMDkKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg2FsTUj02QS6RJwQ9wjuCv2tn8lgsvnwwgsNyKnHfnjF00K"
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMTc00Y2ViMGZlMDJhYTRjYWIxMmEyMjRhOTIxMTg00MjcKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgTHZOim91ZFEPrpgznn4U9HN7hPXHkjBYxG6d3802DmgIK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgY2MyMDQ5ZGRiYzkwMzA4ZjJmNTFhYzI4YjA5ZGFlMWYKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg737kjsDRUEV020201N00GJrEiIScA01Bbb13RbchKUQRV02VsK"
 }
 
 variable "oppass" {

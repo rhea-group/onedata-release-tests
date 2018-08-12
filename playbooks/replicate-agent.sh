@@ -79,7 +79,7 @@ aliases() {
     Linux)
           _stdbuf=stdbuf
           _date=date
-          _awk=awk
+          _awk=gawk
           ;;
     Darwin)
           _stdbuf=gstdbuf

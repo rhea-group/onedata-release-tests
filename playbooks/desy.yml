@@ -1,14 +1,24 @@
 - hosts: all
   tasks:
+    - name: Install jq
+      become: yes
+      yum:
+        name: jq
+    - name: Create /posix/desy
+      file:
+        path: /posix/desy
+        mode: 0777
+        state: directory
     - name: Prepare desy-replica-agent.sh
       template:
         src: "desy-replica-agent.j2"
         dest: "{{ansible_user_dir}}/desy-replica-agent.sh"
         mode: 0755
+    - debug: msg={{ansible_user_dir}}
     - name: Copy replicate-agent.sh
       copy:
         src: replicate-agent.sh
-        dest: replicate-agent.sh
+        dest: "{{ansible_user_dir}}/replicate-agent.sh"
         mode: 0755
     - name: Copy gawk-4.2.1
       copy:
