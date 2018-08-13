@@ -61,7 +61,18 @@ Before repeating the remote access test make sure the replica of rt directory on
 ## Observing metrics
 The performance metrics can be observed with grafana. To do so go to the grafana IP address using a web browser and login using admin:admin. 
 
-## Upgrading onedata
+## DESY test
+The DESY test generates a HDF5 file on imported POSIX/NFS storage and reads it on the other side. The reverse case is also tested. In order to run the test:
+- on the host op2 run:
+```
+./desy-replica-agent.sh
+```
+- on the host op2 in another terminal run:
+```
+./run-desy.sh
+```
+
+# Upgrading onedata
 - Login to each oneprovider as user centos and run:
 ```
 onedatify upgrade -v <new-version>
@@ -85,7 +96,10 @@ vi exo.tvars
 vi variables.tf
 
 ```
-
+### Run terraform
+```
+terraform apply -var-file exo.tvars -var project=odt
+```
 
 
 # Uninstalling or re-installing

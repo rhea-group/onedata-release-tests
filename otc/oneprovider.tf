@@ -40,6 +40,7 @@ resource "openstack_networking_port_v2" "op-ceph-port" {
   network_id         = "${openstack_networking_network_v2.network.id}"
   security_group_ids = [
     "${openstack_compute_secgroup_v2.op.id}",
+    "${openstack_compute_secgroup_v2.ceph.id}",
   ]
   admin_state_up     = "true"
   fixed_ip           = {
@@ -128,7 +129,7 @@ resource "null_resource" "op-ceph-oneclient" {
   }
   provisioner "remote-exec" {
     inline = [  
-      "ansible-playbook playbooks/oneclient.yml -i \"localhost,\" --extra-vars \"oneprovider=${openstack_compute_instance_v2.op-ceph.name}.${var.onezone} access_token=${var.access_token} oneclient_package=${var.oneclient_package} \"",
+      "ansible-playbook playbooks/oneclient.yml -i \"localhost,\" --extra-vars \"oneprovider=${openstack_compute_instance_v2.op-ceph.name}.${var.onezone} access_token=${var.access_token} oneclient_package=${var.oneclient_package} grafana_ip=${openstack_networking_floatingip_v2.grafana.address}\"",
     ]
   }
 }

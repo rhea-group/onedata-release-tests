@@ -129,7 +129,7 @@ resource "null_resource" "op-ceph-oneclient" {
   }
   provisioner "remote-exec" {
     inline = [  
-      "ansible-playbook playbooks/oneclient.yml -i \"localhost,\" --extra-vars \"oneprovider=${exoscale_compute.op-ceph.name}.${var.onezone} access_token=${var.access_token} oneclient_package=${var.oneclient_package} \"",
+      "ansible-playbook playbooks/oneclient.yml -i \"localhost,\" --extra-vars \"oneprovider=${exoscale_compute.op-ceph.name}.${var.onezone} access_token=${var.access_token} oneclient_package=${var.oneclient_package} grafana_ip=${exoscale_compute.grafana.ip_address} \"",
     ]
   }
 }

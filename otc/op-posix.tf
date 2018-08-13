@@ -110,3 +110,18 @@ resource "null_resource" "op-posix-onedatify" {
     ]
   }
 }
+
+resource "null_resource" "op-posix-desy" { 
+  depends_on = ["null_resource.prepare-op-posix","null_resource.op-ceph-oneclient"]
+  connection {
+    host = "${openstack_networking_floatingip_v2.op-posix.address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/desy.yml -i \"localhost,\" --extra-vars \" access_token=${var.access_token} onezone=${var.onezone} space_name=${var.space_name} source_provider=${openstack_compute_instance_v2.op-ceph.name}.${var.onezone} destination_provider=${openstack_compute_instance_v2.op-posix.name}.${var.onezone} remote_host_ip=${openstack_networking_floatingip_v2.op-ceph.address}\"",
+    ]
+  }
+}

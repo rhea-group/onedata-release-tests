@@ -7,6 +7,38 @@
         path: /posix
         mode: 0777
         state: directory
+    - name: Check for additional disk (/dev/xvdb)
+      stat:
+        path: /dev/xvdb
+      register: xvdb
+    - name: Check for additional disk (/dev/vdb)
+      stat:
+        path: /dev/vdb
+      register: vdb
+    - name: Make filesystem on /dev/xvdb
+      filesystem:
+        dev: /dev/xvdb
+        fstype: xfs
+      when: xvdb.stat.exists
+    - name: Mount /dev/xvdb
+      mount:
+        state: mounted
+        src: /dev/xvdb
+        fstype: xfs
+        path: /posix
+      when: xvdb.stat.exists
+    - name: Make filesystem on /dev/vdb
+      filesystem:
+        dev: /dev/vdb
+        fstype: xfs
+      when: vdb.stat.exists
+    - name: Mount /dev/vdb
+      mount:
+        state: mounted
+        src: /dev/vdb
+        fstype: xfs
+        path: /posix
+      when: vdb.stat.exists
     - name: Create /posix/rt
       file:
         path: /posix/rt
