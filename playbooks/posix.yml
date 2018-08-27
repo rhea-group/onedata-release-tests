@@ -39,6 +39,8 @@
         fstype: xfs
         path: /posix
       when: vdb.stat.exists
+    - name: Change permissions for /posix
+      command: "/usr/bin/chmod 0777 /posix"
     - name: Create /posix/rt
       file:
         path: /posix/rt

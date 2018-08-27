@@ -69,7 +69,7 @@ resource "null_resource" "provision-kubespray" {
       # "sudo systemctl disable firewalld",
       # "sudo systemctl stop firewalld",
       "grep ansible_host inventory-kube.ini | cut -f2 -d= | xargs -I{} ssh -o StrictHostKeyChecking=no {} hostname",
-      "cd playbooks; git clone https://github.com/kubernetes-incubator/kubespray.git; cd ..",
+      "cd playbooks; git clone -b v2.6.0 https://github.com/kubernetes-incubator/kubespray.git; cd ..",
       "sudo pip install -r playbooks/kubespray/requirements.txt",
       # "cd playbooks; tar zxvf ../kubespray.tgz; cd ..",
       "ansible-playbook -b -i inventory-kube.ini playbooks/kubespray/cluster.yml -e dashboard_enabled=true -e '{kubeconfig_localhost: true}' -e kube_network_plugin=flannel -e cluster_name=kube.${var.dnszone} -e domain_name=kube.${var.dnszone} -e kube_service_addresses=${var.kube_service_addresses} -e kube_pods_subnet=${var.kube_pods_subnet} -f 50 -T 30 -e docker_dns_servers_strict=no"
