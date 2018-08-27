@@ -112,7 +112,7 @@ resource "null_resource" "op-posix-onedatify" {
 }
 
 resource "null_resource" "op-posix-desy" { 
-  depends_on = ["null_resource.prepare-op-posix","null_resource.op-ceph-oneclient"]
+  depends_on = ["null_resource.prepare-op-posix","null_resource.op-posix-onedatify","null_resource.op-ceph-oneclient"]
   connection {
     host = "${openstack_networking_floatingip_v2.op-posix.address}"
     user     = "${var.ssh_user_name}"
