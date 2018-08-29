@@ -72,3 +72,18 @@ resource "null_resource" "op-posix-desy" {
     ]
   }
 }
+
+resource "null_resource" "op-posix-iperf-server" { 
+  depends_on = ["null_resource.op-posix-desy"]
+  connection {
+    host = "${exoscale_compute.op-posix.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/iperf3-server.yml -i \"localhost,\"",
+    ]
+  }
+}
