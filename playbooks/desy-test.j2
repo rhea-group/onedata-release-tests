@@ -6,6 +6,7 @@ import subprocess
 import shlex
 import sys
 import time
+import json
 
 #import utils
 
@@ -145,7 +146,20 @@ def test(nFiles,suffix, fileSize, dir, pathR, pathL, user, ip):
 
     realSize_MB= realSize/ 1024 / 1024
 
-
+    if dir[0] == 'R':
+        # Wait for replication to complete
+        print "Waiting for replication..."
+        head, filename = os.path.split(fname["R"])
+        command = 'curl --tlsv1.2 -X GET -H "X-Auth-Token: '+sys.argv[5]+'" "https://'+sys.argv[6]+'/api/v3/oneprovider/replicas/'+sys.argv[7]+'/desy/'+filename+'"'
+        a = "1"
+        b = "2"
+        while a != b:
+            output=subprocess.check_output(command, stderr=open('err.log', 'a'), shell=True)
+            data = json.loads(output)
+            a = data[0]["blocks"]
+            b = data[1]["blocks"]
+            time.sleep(5)
+            
     print "Access file " + resname[dir[1]] + "ly:",
     timeAccess = executeCommand(dir[1], readFileCommand(dir[1],fname[dir[1]], fileSize,1), ssh,True)[1]
     print "%.2f s, BW: %d Mb/s, BW_Eff: %d Mb/s" % (timeAccess, int(realSize_MB / float(timeAccess) * 8),int(realSize_MB / float(timeAccess + timeVis) * 8))
