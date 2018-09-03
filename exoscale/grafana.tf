@@ -26,6 +26,7 @@ resource "null_resource" "provision-grafana" {
   provisioner "remote-exec" {
     inline = [
       "ansible-playbook -i \"${exoscale_compute.grafana.ip_address},\" playbooks/grafana.yml",
+      "ansible-playbook -i \"${exoscale_compute.grafana.ip_address},\" playbooks/roles/influxdb/test.yml",
     ]
   }
 }
