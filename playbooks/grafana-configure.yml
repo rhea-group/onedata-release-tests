@@ -1,0 +1,18 @@
+- hosts: all
+  tasks:
+    - name: Copy datasource
+      copy:
+        src: templates/influxdb.grafana.datasource.j2
+        dst: /tmp/influxdb.json
+      become: no
+    - name: Create datasource
+      shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/datasources -X POST -d @/tmp/influxdb.json -H 'Content-Type: application/json' > curl.out 2>curl.err"
+      become: no
+    - name: Copy dashboard
+      copy:
+        src: templates/grafana.dashboard.ceph.j2
+        dest: "/tmp/dashboard.ceph.json"
+      become: no
+    - name: Upload grafana dashboard 
+      shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/dashboards/db -X POST -d @/tmp/dashboard.ceph.json -H 'Content-Type: application/json' > curl.out 2>curl.err" 
+      become: no
