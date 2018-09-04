@@ -3,7 +3,7 @@
     - name: Copy datasource
       copy:
         src: templates/influxdb.grafana.datasource.j2
-        dst: /tmp/influxdb.json
+        dest: /tmp/influxdb.json
       become: no
     - name: Create datasource
       shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/datasources -X POST -d @/tmp/influxdb.json -H 'Content-Type: application/json' > curl.out 2>curl.err"
