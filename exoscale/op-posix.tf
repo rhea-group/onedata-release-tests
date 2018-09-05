@@ -75,3 +75,33 @@ resource "null_resource" "op-posix-desy" {
     ]
   }
 }
+
+resource "null_resource" "op-posix-desy-multi" { 
+  depends_on = ["null_resource.prepare-op-posix","null_resource.op-posix-onedatify","null_resource.oneclients"]
+  connection {
+    host = "${exoscale_compute.op-posix.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/desy-multi.yml -i \"localhost,\" --extra-vars \" access_token=${var.access_token} onezone=${var.onezone} space_name=${var.space_name} destination_provider=${exoscale_compute.op-posix.name}.${var.onezone} ip_list=\\\"${join(" ", formatlist("%s", exoscale_compute.client-nodes.*.ip_address))}\\\"\"",
+    ]
+  }
+}
+
+resource "null_resource" "op-posix-collectd" { 
+  depends_on = ["null_resource.provision-grafana"]
+  connection {
+    host = "${exoscale_compute.op-posix.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/collectd.yml -i \"localhost,\" --extra-vars \" grafana_ip=${exoscale_compute.grafana.ip_address} \"",
+    ]
+  }
+}

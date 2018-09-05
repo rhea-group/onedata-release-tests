@@ -115,6 +115,12 @@ resource "openstack_compute_secgroup_v2" "ceph" {
     cidr        = "0.0.0.0/0"
   }
   rule {
+    from_port   = 2003
+    to_port     = 2003
+    ip_protocol = "tcp"
+    cidr        = "0.0.0.0/0"
+  }
+  rule {
     from_port   = 7000
     to_port     = 7000
     ip_protocol = "tcp"
