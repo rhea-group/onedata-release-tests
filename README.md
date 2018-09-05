@@ -71,7 +71,8 @@ The DESY test generates a HDF5 file on imported POSIX/NFS storage and reads it o
 ```
 ./run-desy.sh
 ```
-For the DESY multi-host/multi-file test run:
+## DESY multi-client test
+For the DESY multi-client test run:
 ```
 ./perf_first.sh 1 large
 ./perf_next 1 large
