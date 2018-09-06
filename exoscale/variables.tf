@@ -119,18 +119,18 @@ variable "ceph-mon_count" {
 
 # The number of VM for running OSDs.
 variable "ceph-node_count" {
-  default = "4"
+  default = "${ceph-node-count}"
 }
 
 # The size of elastic volumes which will be attached to the OSDs. The size is given in GB.
 variable "vol_size" {
-  default = "400"
+  default = "${ceph-disk-vol-size}"
 }
 
 # The number of disks to attach to each VM for running OSDs. The raw Ceph total capacity
 # will be (osd_count * disks-per-osd_count * vol_size) GB.
 variable "disks-per-osd_count" {
-  default = "1"
+  default = "${ceph-disks-per-osd-count}"
 }
 
 # The disk device naming (prefix) for the given flavor.
