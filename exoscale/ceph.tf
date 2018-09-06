@@ -1,3 +1,7 @@
+locals {
+  telegraf_influxdb_url = "http://${exoscale_compute.grafana.ip_address}:8086"
+}
+
 resource "exoscale_compute" "ceph-nodes" {
   count = "${var.ceph-node_count}"
   display_name =  "${var.project}-ceph-node-${format("%02d", count.index+1)}"
@@ -88,7 +92,7 @@ resource "null_resource" "deploy-ceph" {
   provisioner "remote-exec" {
     inline = [
       "ansible-playbook playbooks/myceph/myceph.yml -i inventory-ceph.ini --extra-vars \"osd_disks=${var.disks-per-osd_count} vol_prefix=${var.vol_prefix}\" -f 50 -T 30",
-	  "ansible-playbook playbooks/roles/telegraf/test.yml -i inventory-ceph.ini --extra-vars \"{'telegraf_influxdb_urls':['http://' + ${exoscale_compute.grafana.ip_address} + ':8086']}\" ",
+	  "ansible-playbook playbooks/roles/telegraf/test.yml -i inventory-ceph.ini --extra-vars \"{\\\"telegraf_influxdb_urls\\\":[${local.telegraf_influxdb_url}]}\" ",
     ]
   }
   provisioner "local-exec" {
