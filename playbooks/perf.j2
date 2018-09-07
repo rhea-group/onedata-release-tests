@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+ip_list="{{ip_list}}"
+username={{ansible_env.USER}}
+local_dir=/posix/desy
+remote_dir=/tmp/mntoc/{{space_name}}/desy
+space_path={{space_name}}/desy
+access_token={{access_token}}
+provider_fqdn={{destination_provider}}
+file_prefix=test
+file_suffix=h5
+mode=h5sim
+#mode=system
+direction=local-remote
+#direction=remote-local
+key=$HOME/.ssh/id_rsa
+verbose=true
+
+
+choice=$2
+remove=$3
+create=$4
+wait_for_replication=$5
+
+nper_node=$1
+echo process $choice dataset
+echo on nodes $ip_list
+echo "$nper_node call(s)/node"
+
+p=0
+for ip in $ip_list
+do
+ for i in $(seq 1 $nper_node)
+ do
+  p=$[$p +1]
+  python TDA_performance.py --access-token ${access_token} --provider-fqdn ${provider_fqdn} --space-path ${space_path} --remote-address $ip --remote-dir $remote_dir --local-dir $local_dir --writeread-mode $mode --size $choice  --file-name ${file_prefix}${p}.${file_suffix} --user ${username} --direction $direction --remove-afterwards ${remove} --create-files ${create} --rsa-key-file $key --wait-for-replication $wait_for_replication &> output${p} --verbose $verbose &
+ # echo python TDA_performance.py --access-token ${access_token} --provider-fqdn ${provider_fqdn} --space-path ${space_path} --remote-address $ip --remote-dir $remote_dir --local-dir $local_dir --writeread-mode $mode --size $choice  --file-name ${file_prefix}${p}.${file_suffix} --user ${username} --direction $direction --remove-afterwards ${remove} --create-files ${create} --rsa-key-file $key --verbose $verbose --wait-for-replication $wait_for_replication
+ done
+done
+
+wait
+
+
+rm -f extracted_data.dat
+for i in $(seq 1 $p)
+do
+data=`cat output${i} | grep BW | awk '{print $4 " " $9 " " $11}' | head -1`
+echo $data >> extracted_data.dat
+done
+
+python get_band.py extracted_data.dat
+

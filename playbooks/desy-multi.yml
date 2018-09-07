@@ -1,0 +1,54 @@
+- hosts: all
+  tasks:
+    # - name: Install jq
+    #   become: yes
+    #   yum:
+    #     name: jq
+    # - name: Create /posix/desy
+    #   become: yes
+    #   file:
+    #     path: /posix/desy
+    #     mode: 0777
+    #     state: directory
+    # - name: Prepare desy-replica-agent.sh
+    #   template:
+    #     src: "desy-replica-agent.j2"
+    #     dest: "{{ansible_user_dir}}/desy-replica-agent.sh"
+    #     mode: 0755
+    # - debug: msg={{ansible_user_dir}}
+    # - name: Copy replicate-agent.sh
+    #   copy:
+    #     src: replicate-agent.sh
+    #     dest: "{{ansible_user_dir}}/replicate-agent.sh"
+    #     mode: 0755
+    # - name: Copy gawk-4.2.1
+    #   copy:
+    #     src: gawk-4.2.1.tgz
+    #     dest: /tmp/gawk-4.2.1.tgz
+    # - name: Unpack gawk-4.2.1
+    #   become: yes
+    #   shell: tar zxPvf /tmp/gawk-4.2.1.tgz
+    - name: Install pythom modules
+      become: yes
+      pip:
+        name: "{{item}}"
+      with_items:
+        - numpy
+        - scipy
+    - name: Copy TDA_performance.py and etc
+      copy:
+        src: "{{item}}"
+        dest: "{{ansible_user_dir}}/{{item}}"
+        mode: 0755
+      with_items:
+        - TDA_performance.py
+        - perf_first.sh
+        - perf_next.sh
+        - perf_last.sh
+        - get_band.py
+    - name: Copy perf.sh
+      template:
+        src: perf.j2
+        dest: "{{ansible_user_dir}}/perf.sh"
+        mode: 0755
+        

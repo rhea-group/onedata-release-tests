@@ -71,7 +71,15 @@ The DESY test generates a HDF5 file on imported POSIX/NFS storage and reads it o
 ```
 ./run-desy.sh
 ```
-
+## DESY multi-client test
+For the DESY multi-client test run:
+```
+./perf_first.sh 1 large
+./perf_next 1 large
+./perf_last 1 large
+```
+By default 3 client VMs are created by terraform for this test. You can change the number of clients in varaibles.tf. The name of the varaible is "client_count".
+For more info about those test refer to https://stash.desy.de/projects/HNSCIC/repos/performance-tests/browse.
 # Upgrading onedata
 - Login to each oneprovider as user centos and run:
 ```

@@ -134,6 +134,21 @@ resource "null_resource" "op-ceph-oneclient" {
   }
 }
 
+resource "null_resource" "op-ceph-collectd" { 
+  depends_on = ["null_resource.provision-grafana"]
+  connection {
+    host = "${exoscale_compute.op-posix.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/collectd.yml -i \"localhost,\" --extra-vars \" grafana_ip=${exoscale_compute.grafana.ip_address} \"",
+    ]
+  }
+}
+
 resource "exoscale_security_group" "op" {
   name = "${var.project}-op"
 }

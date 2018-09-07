@@ -106,6 +106,15 @@ variable "op-flavor" {
   default = "Huge"
 }
 
+### Oneclients
+variable "client_count" {
+  default = "3"
+}
+
+variable "client_flavor" {
+  default = "Medium"
+}
+
 ### Ceph cluster settings
 variable "ceph-flavor" {
   default = "Medium"
