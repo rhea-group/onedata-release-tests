@@ -2,7 +2,7 @@
    "name":"od-ceph-telegraf",
    "type":"influxdb",
    "access":"proxy",
-   "url":"http://89.145.160.131:8086",
-   "database":"telegraf2",
+   "url":"http://${exoscale_compute.grafana.ip_address}:8086",
+   "database":"telegraf",
    "basicAuth":false
 }
