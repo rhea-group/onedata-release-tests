@@ -1,7 +1,7 @@
 - hosts: all
   tasks:
     - name: Copy datasource
-      copy:
+      template:
         src: templates/influxdb.grafana.datasource.j2
         dest: /tmp/influxdb.json
       become: no
