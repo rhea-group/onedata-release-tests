@@ -92,7 +92,7 @@ resource "null_resource" "deploy-ceph" {
   provisioner "remote-exec" {
     inline = [
       "ansible-playbook playbooks/myceph/myceph.yml -i inventory-ceph.ini --extra-vars \"osd_disks=${var.disks-per-osd_count} vol_prefix=${var.vol_prefix}\" -f 50 -T 30",
-	  "ansible-playbook playbooks/roles/telegraf/test.yml -i inventory-ceph.ini --extra-vars \"{\\\"telegraf_influxdb_urls\\\":[\\\"${local.telegraf_influxdb_url}\\\"]}\" ",
+	  "ansible-playbook playbooks/roles/telegraf/test.yml -i inventory-ceph.ini --extra-vars \"{\\\"telegraf_influxdb_urls\\\":[\\\"${local.telegraf_influxdb_url}\\\"], \\\"telegraf_plugins_extra\\\":[\\\"ceph\\\"]}\" ",
     ]
   }
   provisioner "local-exec" {
