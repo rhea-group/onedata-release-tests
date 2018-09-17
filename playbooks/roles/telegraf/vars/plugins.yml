@@ -1,0 +1,6 @@
+---
+
+telegraf_plugins_extra:
+  - name: ceph
+    options:
+      gather_cluster_stats: "true"
