@@ -27,7 +27,7 @@ resource "null_resource" "provision-grafana" {
     inline = [
       "ansible-playbook -i \"${exoscale_compute.grafana.ip_address},\" playbooks/grafana.yml",
       "ansible-playbook -i \"${exoscale_compute.grafana.ip_address},\" playbooks/roles/influxdb/test.yml",
-      "ansible-playbook -i \"${exoscale_compute.grafana.ip_address},\" playbooks/grafana-configure.yml",
+      "ansible-playbook -i \"${exoscale_compute.grafana.ip_address},\" playbooks/grafana-configure.yml -e \"grafana_ip=${exoscale_compute.grafana.ip_address}\"",
     ]
   }
 }
