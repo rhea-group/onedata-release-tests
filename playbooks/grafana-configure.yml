@@ -9,7 +9,7 @@
       shell: "curl http://admin:admin@{{ansible_default_ipv4.address}}:80/api/datasources -X POST -d @/tmp/influxdb.json -H 'Content-Type: application/json' > curl.out 2>curl.err"
       become: no
     - name: Copy dashboard
-      copy:
+      template:
         src: templates/grafana.dashboard.ceph.j2
         dest: "/tmp/dashboard.ceph.json"
       become: no
