@@ -1,4 +1,14 @@
-- hosts: all
+- hosts: mgt osds
+  become: yes
+  become_user: root
+  vars_files:
+    - defaults/main.yml
+    - vars/main.yml
+  tasks:
+    - include: tasks/main.yml
+  handlers:
+    - include: handlers/main.yml
+- hosts: mons
   become: yes
   become_user: root
   vars_files:
