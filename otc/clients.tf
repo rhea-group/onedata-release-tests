@@ -9,7 +9,7 @@ resource "openstack_compute_instance_v2" "client-nodes" {
   count           = "${var.client_count}"
   name            = "${var.project}-client-node-${format("%02d", count.index+1)}"
   # image_name      = "${var.image_name}"				#"bitnami-ceph-osdstack-7.0.22-1-linux-centos-7-x86_64-mp"
-  flavor_name     = "${var.ceph_node_flavor}"
+  flavor_name     = "${var.client_flavor}"
   key_pair        = "${openstack_compute_keypair_v2.otc.name}"
   availability_zone = "${var.otc_availability_zone}"
   security_groups = [
@@ -70,10 +70,6 @@ resource "null_resource" "oneclients" {
       "ansible-playbook playbooks/oneclients.yml -i inventory-clients.ini --extra-vars \"oneprovider=${openstack_compute_instance_v2.op-ceph.name}.${var.onezone} access_token=${var.access_token} oneclient_package=${var.oneclient_package} grafana_ip=${openstack_networking_floatingip_v2.grafana.address}\"",
     ]
   }
-}
-
-variable "client_count" {
-  default = "2"
 }
 
 output "Oneclients nodes addresses" {

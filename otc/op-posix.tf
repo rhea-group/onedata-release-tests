@@ -32,7 +32,7 @@ resource "openstack_blockstorage_volume_v2" "op-posix-image-vol" {
   name = "${var.project}-op-vol"
   size = "${var.image_vol_size}"
   volume_type = "${var.image_vol_type}"
-  availability_zone = "${var.otc_availability_zone}"
+  availability_zone = "${var.otc_availability_zone2}"
   image_id = "${var.image_uuid}"
 }
 
@@ -41,6 +41,7 @@ resource "openstack_networking_port_v2" "op-posix-port" {
 #  network_id         = "${openstack_networking_network_v2.network.id}"
   security_group_ids = [
     "${openstack_compute_secgroup_v2.op.id}",
+    "${openstack_compute_secgroup_v2.ceph.id}",
   ]
   admin_state_up     = "true"
   fixed_ip           = {
@@ -52,7 +53,7 @@ resource "openstack_blockstorage_volume_v2" "op-posix-vol" {
   name = "${var.project}-op-posix-vol"
   size = "${var.op-posix-vol_size}"
   volume_type = "${var.vol_type}"
-  availability_zone = "${var.otc_availability_zone}"
+  availability_zone = "${var.otc_availability_zone2}"
 }
 
 resource "openstack_compute_volume_attach_v2" "op-posix-vas" {

@@ -308,6 +308,8 @@ EOF
 
 EOF
 
+  #log_curl=1
+  #log_curl_cmd() { if (( log_curl )); then $_stdbuf -i0 -o0 -e0 tee -a curl.log; else cat; fi; > /dev/null }
 
   log_steam_cmd() { if (( log_stream )); then $_stdbuf -i0 -o0 -e0 tee -a stream.log; else cat; fi; }
   
@@ -336,6 +338,8 @@ EOF
           last_seq_number=$(cat ./last_seq)
         fi
       fi
+    else
+      last_seq_number=0
     fi
     if [[ "$last_seq_number" != "" ]] ; then
       if [[ $last_seq_number =~ ^[0-9]+$ ]] ; then
@@ -349,9 +353,11 @@ EOF
     fi
   }
 
+  echo "Entering loop at $(date)"
   while true ; do
     last_seq_func
     check_cache
+    echo "Requesting stream at $(date)"
     while IFS=$'\t' read seq file_name file_path file_id ; do
       date_cache="$($_date --date="$defer_time seconds ago" +%s)"
       if ! $_awk -i inplace -v time=$($_date +%s) -v filename="$file_path" 'BEGIN{err=1};match($0, filename) {gsub($1,time); err=0};{print} END {exit err}' "$changes_cache"; then
@@ -383,10 +389,11 @@ EOF
         (( seq++ ))
         echo "$seq" > last_seq
       fi
-    done < <(${_curl[@]} --max-time "$defer_time" "https://$source_provider/api/v3/oneprovider/changes/metadata/$space_id?${last_seq}" 2>/dev/null | log_steam_cmd | $_stdbuf -i0 -o0 -e0 jq -r 'select((.deleted==false ) and (.changes.type=="REG")) | "\(.seq)\t\(.name)\t\(.file_path)\t\(.file_id)"' )
-
+    done < <(${_curl[@]} "https://$source_provider/api/v3/oneprovider/changes/metadata/$space_id?timeout=${defer_time}000&${last_seq}" 2>curl_err.log | log_steam_cmd | $_stdbuf -i0 -o0 -e0 jq -r 'select((.deleted==false ) and (.changes.type=="REG")) | "\(.seq)\t\(.name)\t\(.file_path)\t\(.file_id)"' )
+    echo "Changes stream ended at $(date)"
     last_seq_func_verbose=0
   done
+
 }
 
 aliases

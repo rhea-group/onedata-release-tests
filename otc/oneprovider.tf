@@ -137,7 +137,7 @@ resource "null_resource" "op-ceph-oneclient" {
 resource "null_resource" "op-ceph-collectd" { 
   depends_on = ["null_resource.provision-grafana"]
   connection {
-    host = "${openstack_networking_floatingip_v2.op-posix.address}"
+    host = "${openstack_networking_floatingip_v2.op-ceph.address}"
     user     = "${var.ssh_user_name}"
     agent = true
     timeout = "10m"

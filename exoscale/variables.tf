@@ -68,11 +68,11 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMTQ4N2E5OTY5ZTQyZjRhOTNkNTcyYjEzMTAyMzU3ZWQKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg5Fba01LpgEN4AT26YK9CaKDJrguIXrvPdlbLexTYWOAIK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgNzMzZDgyZjFmMjA00ZTRiYTQzY2IzNmFkNzI3ZTk3NzcKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgtzY5NjVA1veEKXI02THazZbmM5RlDovP8Fm302MKuxXscK"
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMGE1NmZmNjE4N2IxNTA2NzIwYjUwZGNmODg00NmJiOWQKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg019qEuZVnNfKCWbIykZBAiZyddWQmHKrVdaSs01PtdskoK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgNGFmOTY2ODA5MDNhMjliODg4NjkxMDQyMzAxZDBmMzkKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg301Foj2YtXO01k5DvC01R1cfmrX5jNkExw4yytYfpuFm4QK"
 }
 
 variable "oppass" {
@@ -92,7 +92,8 @@ variable "storage_type_posix" {
 }
 
 variable "support_size_posix" {
-  default = "322122547200" # 300GB
+  # default = "322122547200" # 300GB
+  default = "1610612736000" #1500GB
 }
 
 variable "onezone" {
@@ -107,14 +108,33 @@ variable "op-flavor" {
   default = "Huge"
 }
 
+variable "op-posix-flavor" {
+  default = "Titan"
+}
+
+variable "op-posix-disk" {
+  default = "1600"
+}
+
 ### Oneclients
 variable "client_count" {
-  default = "3"
+  default = "1"
 }
 
 variable "client_flavor" {
-  default = "Medium"
+  default = "Extra-large"
 }
+
+### NFS clients
+variable "nfs_client_count" {
+  default = "1"
+}
+
+variable "nfs_client_flavor" {
+  default = "Extra-large"
+}
+
+
 
 ### Ceph cluster settings
 variable "ceph-flavor" {
@@ -173,7 +193,7 @@ variable "kube-ctlr_count" {
 
 # The number of workers of Kube cluster. 
 variable "kube-work_count" {
-  default = "2"
+  default = "1"
 }
 
 # ### VM (Instance) Settings
