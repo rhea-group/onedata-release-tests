@@ -1,7 +1,7 @@
 resource "openstack_networking_floatingip_v2" "nfs-clients" {
   depends_on = ["openstack_compute_instance_v2.nfs-clients"]
   port_id  = "${element(openstack_networking_port_v2.nfs-clients.*.id, count.index)}"
-  count = "${var.client_count}"
+  count = "${var.nfs_client_count}"
   pool  = "${var.external_network}"
 }
 
