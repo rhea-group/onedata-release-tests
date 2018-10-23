@@ -117,7 +117,7 @@ variable "client_flavor" {
 
 ### Ceph cluster settings
 variable "ceph-flavor" {
-  default = "Medium"
+  default = "${ceph-flavor}"
 }
 
 
