@@ -418,7 +418,30 @@
           }
         ]
       }
-    ]
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": null,
+          "datasource": "od-ceph-telegraf",
+          "hide": 0,
+          "includeAll": true,
+          "label": null,
+          "multi": true,
+          "name": "host",
+          "options": [],
+          "query": "SHOW TAG VALUES WITH KEY = \"host\"",
+          "refresh": 1,
+          "regex": "",
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    }
   },
   "folderId": 0,
   "overwrite": false
