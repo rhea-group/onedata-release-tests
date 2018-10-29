@@ -3,8 +3,8 @@ resource "exoscale_compute" "op-posix" {
   display_name =  "${var.project}-exo-op2"
   template = "Linux CentOS 7.4 64-bit"
   zone = "${var.zone2}"
-  size = "${var.op-flavor}"
-  disk_size = 400
+  size = "${var.op-posix-flavor}"
+  disk_size = "${var.op-posix-disk}"
   key_pair = "${var.project}-exo"
   security_groups = ["${exoscale_security_group.op.name}"]
   affinity_groups = ["${exoscale_affinity.op.name}"]

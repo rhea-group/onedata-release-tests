@@ -143,6 +143,21 @@ resource "null_resource" "provision-ceph" {
   }
 }
 
+resource "null_resource" "ceph-nodes-collectd" { 
+  depends_on = ["null_resource.provision-grafana"]
+  connection {
+    host = "${openstack_networking_floatingip_v2.op-ceph.address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/collectd.yml -i inventory-ceph.ini --extra-vars \" grafana_ip=${openstack_networking_floatingip_v2.grafana.address} \"",
+    ]
+  }
+}
+
 resource "openstack_blockstorage_volume_v2" "vols" {
   count           = "${var.ceph-node_count * var.disks-per-osd_count}"
   name = "${var.project}-${format("vol-%03d", count.index + 1)}"

@@ -29,7 +29,7 @@ def remoteCommand(ssh, str, verbose=False):
 
 def waitFile(site, file, status, ssh, filesize=0):
      t = 0
-     timeout = 6000
+     timeout = 200
      start = timer()
      while True:
 #         executeCommand(site, "ls -la " + os.path.dirname(file), ssh)
@@ -61,6 +61,7 @@ def waitFile(site, file, status, ssh, filesize=0):
 def executeCommand(site, command, ssh, verbose=False):
     if verbose:
         print site, command
+        sys.stdout.flush()
 
     if ">" not in command and not verbose:
         command += " >/dev/null 2>&1"
@@ -113,7 +114,7 @@ def readFileCommand(dir, fname, size, attempt):
 def getFileSize(args):
     if args.size == "small":
         size = 99971392
-    elif args.size == "meduim":
+    elif args.size == "medium":
         size = 999696128
     elif args.size == "large":
         size = 9996937344
@@ -123,6 +124,8 @@ def getFileSize(args):
 
 def start(args):
     print "start"
+    sys.stdout.flush()
+
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -130,6 +133,8 @@ def start(args):
 
     #ssh.connect(args.ip, username=args.user, pkey=mykey)
     ssh.connect(args.ip, username=args.user)
+    print "paramiko ssh: connected"
+    sys.stdout.flush()
 
     resname = {'L': 'local', 'R': 'remote'}
 
@@ -146,19 +151,27 @@ def start(args):
     timeVis = 0
     if args.createFiles:
         print "File created " + resname[dir[0]] + "ly in:",
+        sys.stdout.flush()
         elapsed = executeCommand(dir[0], createFileCommand(dir[0], fname[dir[0]], fileSize), ssh)[1]
         print "%.2f s" % (elapsed)
+        sys.stdout.flush()
 
         print "File visible " + resname[dir[1]] + "ly after:",
+        sys.stdout.flush()
         timeVis = waitFile(dir[1], fname[dir[1]], "exists", ssh, fileSize)
-#    if dir == "RL":
-#        timeVis += utils.waitTransferRequestsFinished(fname[dir[1]], 600)
-    if dir[0] == 'R' and args.waitForReplication == True:
+    # if dir == "RL":
+        # timeVis += utils.waitTransferRequestsFinished(fname[dir[1]], 600)
+        print "%.2f s" % timeVis
+        print "-" * 80
+        sys.stdout.flush()
+    if dir[0] == 'R' and args.waitForReplication == "true":
         # Wait for replication to complete
         print "Waiting for replication..."
+        sys.stdout.flush()
         head, filename = os.path.split(fname["R"])
         command = 'curl --tlsv1.2 -X GET -H "X-Auth-Token: '+args.accessToken+'" "https://'+args.providerFQDN+'/api/v3/oneprovider/replicas/'+args.spacePath+'/'+filename+'"'
         print command
+        sys.stdout.flush()
         a = "1"
         b = "2"
         while a != b:
@@ -167,25 +180,30 @@ def start(args):
             a = data[0]["blocks"]
             b = data[1]["blocks"]
             time.sleep(5)
-        print "%.2f s" % timeVis
-        print "-" * 80
 
     realSize = os.path.getsize(fname["L"])
     realSize_MB = realSize / 1024 / 1024
 
     print "Access file " + resname[dir[1]] + "ly:",
+    sys.stdout.flush()
     epoch_time_start = time.time()
-    timeAccess = executeCommand(dir[1], readFileCommand(dir[1], fname[dir[1]], fileSize, 1), ssh, args.verbose)[1]
+    st, timeAccess = executeCommand(dir[1], readFileCommand(dir[1], fname[dir[1]], fileSize, 1), ssh, args.verbose)
     epoch_time_end = time.time()
+    print st
     print "%.2f s, BW: %d Mb/s, BW_Eff: %d Mb/s, %.2f , %.2f" % (
     timeAccess, int(realSize_MB / float(timeAccess) * 8), int(realSize_MB / float(timeAccess + timeVis) * 8),
     epoch_time_start,epoch_time_end)
+    sys.stdout.flush()
     if args.removeAfterwards:
         print "Remove file " + resname[dir[1]] + "ly in:",
-        elapsed = executeCommand(dir[1], "rm -rf " + fname[dir[1]], ssh)[1]
+        sys.stdout.flush()        
+        st, elapsed = executeCommand(dir[1], "rm -rf " + fname[dir[1]], ssh)
         print "%.2f s" % (elapsed)
+        print "status of rm: %d" % (st)
+        sys.stdout.flush()
         print "File dissapears " + resname[dir[0]] + "ly after:",
         print "%.2f s" % waitFile(dir[0], fname[dir[0]], "not exists", ssh)
+        sys.stdout.flush()
 
 
 if __name__ == "__main__":

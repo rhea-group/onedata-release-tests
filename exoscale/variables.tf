@@ -46,21 +46,16 @@ variable "onedatify_install_script_version" {
 }
 
 variable "onedatify_oneprovider_version" {
-  default = "onedata/oneprovider:18.02.0-rc10"
+  default = "onedata/oneprovider:18.02.0-rc11"
 }
 
 variable "oneclient_image" {
-  default = "onedata/oneclient:18.02.0-rc10"
+  default = "onedata/oneclient:18.02.0-rc11"
 }
 
 variable "oneclient_package" {
-  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc10-1.el7.centos.x86_64.rpm"
+  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc11-1.el7.centos.x86_64.rpm"
 }
-
-### Oneprovider
-# variable "oneprovider_flavor_name" {
-#   default = "s2.medium.8"
-# }
 
 variable "opdomain" {
   default = "onedata.hnsc.otc-service.com"
@@ -91,7 +86,8 @@ variable "storage_type_posix" {
 }
 
 variable "support_size_posix" {
-  default = "322122547200" # 300GB
+  # default = "322122547200" # 300GB
+  default = "1610612736000" #1500GB
 }
 
 variable "onezone" {
@@ -106,14 +102,33 @@ variable "op-flavor" {
   default = "Huge"
 }
 
+variable "op-posix-flavor" {
+  default = "Titan"
+}
+
+variable "op-posix-disk" {
+  default = "1600"
+}
+
 ### Oneclients
 variable "client_count" {
   default = "3"
 }
 
 variable "client_flavor" {
-  default = "Medium"
+  default = "Extra-large"
 }
+
+### NFS clients
+variable "nfs_client_count" {
+  default = "1"
+}
+
+variable "nfs_client_flavor" {
+  default = "Huge"
+}
+
+
 
 ### Ceph cluster settings
 variable "ceph-flavor" {

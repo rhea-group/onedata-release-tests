@@ -28,13 +28,24 @@
     # - name: Unpack gawk-4.2.1
     #   become: yes
     #   shell: tar zxPvf /tmp/gawk-4.2.1.tgz
-    - name: Install pythom modules
+    - name: Install epel
+      become: yes
+      yum:
+        name: epel-release
+    - name: Install pip
+      become: yes
+      yum:
+        name: "{{item}}"
+      with_items:
+        - python2-pip
+    - name: Install python modules
       become: yes
       pip:
         name: "{{item}}"
       with_items:
         - numpy
         - scipy
+        - paramiko
     - name: Copy TDA_performance.py and etc
       copy:
         src: "{{item}}"
@@ -51,4 +62,17 @@
         src: perf.j2
         dest: "{{ansible_user_dir}}/perf.sh"
         mode: 0755
+    - name: Check for docker
+      stat:
+        path: /usr/bin/docker
+      register: ds
+    - name: Install docker
+      shell: curl --tlsv1 -sSL https://get.docker.com/ | sh
+      when: ds.stat.exists == False
+    - name: Start docker
+      become: yes
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
         

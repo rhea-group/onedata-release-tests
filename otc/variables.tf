@@ -25,7 +25,7 @@ variable "access_token" {
 }
 
 # variable "onedata_version" {
-#   default = "18.02.0-rc10"
+#   default = "18.02.0-rc11"
 # }
 
 variable "onedatify_install_script_version" {
@@ -33,23 +33,16 @@ variable "onedatify_install_script_version" {
 }
 
 variable "onedatify_oneprovider_version" {
-  default = "onedata/oneprovider:18.02.0-rc10"
+  default = "onedata/oneprovider:18.02.0-rc11"
 }
 
 variable "oneclient_image" {
-  default = "onedata/oneclient:18.02.0-rc10"
+  default = "onedata/oneclient:18.02.0-rc11"
 }
 
 variable "oneclient_package" {
-  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc10-1.el7.centos.x86_64.rpm"
+  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc11-1.el7.centos.x86_64.rpm"
 }
-
-# variable "onedatify_version" {
-#   default = "18.02.0-rc9"
-# }
-# variable "oneclient_image" {
-#   default = "onedata/oneclient:18.02.0-rc9"
-# }
 
 ### Oneprovider
 variable "op_flavor_name" {
@@ -59,8 +52,8 @@ variable "op_flavor_name" {
 
 variable "op-posix_flavor_name" {
   #default = "s2.medium.8"
-  #default = "h1.2xlarge.8"
-  default = "h2.3xlarge.10"  
+  default = "s2.2xlarge.4"
+  #default = "h2.3xlarge.10"  
 }
 
 variable "op-posix-vol_size" {
@@ -72,11 +65,11 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMDVlYWQwYzUxNGE3Yjk2ZDNiY2ZkMDdlODZlYmI2Y2IKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgx022l02iOlnoiAdLrhDskSB4Wz9vcXg3v02RXM8uGb1xFgK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgZjZjOTIwZjg00MmRiZWQwMDA3ZGIzNzllN2JkN2M3YzMKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgeS3c1ADHHgIHn3YcgQY337v9rKstcO1jbbsZW4SXy98K"
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMDQ2ZWQ5OGU2NjE00ZTk4MTY5ZGE1NmYxOTk00MTIzOTQKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgLNG3i00z0101GzDxrdJtuuhBfSGL65rEDv5syAm374vNUcK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgOWUzZWYwNTRhOWIwZDcxNDA1ODMxMzc4YTU5YjVlMmIKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgTfQT6nkjcJjj02OBQhID3VeLl9AG3Sqjxwm3aDWT6E3UK"
 }
 
 variable "oppass" {
@@ -106,11 +99,28 @@ variable "onezone" {
   default = "onedata.hnsc.otc-service.com"
 }
 
+### Oneclients
+variable "client_count" {
+  default = "1"
+}
+
+variable client_flavor {
+  default = "s2.large.8"
+}
+
+### NFS clients
+variable "nfs_client_count" {
+  default = "1"
+}
+
+variable "nfs_client_flavor" {
+  default = "s2.2xlarge.4"
+}
+
 ### Grafana
 variable "grafana_flavor_name" {
   default = "s2.large.4"
 }
-
 
 ### Ceph
 # The number of monitors of Ceph cluster. 
@@ -187,7 +197,7 @@ variable "kube-work_count" {
 }
 
 variable "ctlr_flavor_name" {
-  default = "h1.xlarge.8"
+  default = "s2.xlarge.8"
   # default = "s2.medium.8" # for initial testing of tf scripts
 }
 
@@ -236,7 +246,7 @@ variable "otc_availability_zone" {
 }
 
 variable "otc_availability_zone2" {
-  default = "eu-de-01"
+  default = "eu-de-02"
 }
 
 variable "otc_tenant_name" {

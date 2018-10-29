@@ -25,4 +25,4 @@
       copy:
         content: "oneclient -H {{oneprovider}} -t {{access_token}} /tmp/mntoc -i -o allow_other --force-direct-io --force-fullblock-read -v 1 --rndrd-prefetch-cluster-window=12582912 --rndrd-prefetch-cluster-block-threshold=5  --cluster-prefetch-threshold-random --monitoring-type graphite --monitoring-level-full --provider-timeout=400  --monitoring-period 5 --graphite-url tcp://{{grafana_ip}}:2003 --graphite-namespace-prefix oneclient-op-ceph"
         dest: /tmp/oneclient.sh
-        mode: 755
+        mode: 0755

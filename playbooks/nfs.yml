@@ -1,0 +1,39 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install nfs-utils
+      yum:
+        name: "{{item}}"
+      with_items:
+        - nfs-utils
+        
+- hosts: server
+  become: yes
+  tasks:
+    - name: Start nfs server
+      systemd:
+        name: nfs-server
+        state: started
+        enabled: yes
+    - name: /etc/exports
+      template:
+        src: exports.j2
+        dest: /etc/exports
+        mode: 0644
+    - name: exportfs
+      command: exportfs -a
+
+- hosts: clients
+  become: yes
+  tasks:
+    - name: Create /posix dir
+      file:
+        path: /posix
+        state: directory
+        mode: 0777
+    - name: Mount NFS
+      mount:
+        src: "{{nfs_server_ip}}:/posix"
+        path: "/posix"
+        state: mounted
+        fstype: nfs
