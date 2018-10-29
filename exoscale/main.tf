@@ -209,3 +209,21 @@ resource "exoscale_security_group_rule" "iperf" {
   start_port = 5201
   end_port = 5201
 }
+
+resource "exoscale_security_group_rule" "nfsd" {
+  security_group_id = "${exoscale_security_group.op.id}"
+  protocol = "TCP"
+  type = "INGRESS"
+  cidr = "0.0.0.0/0"  # "::/0" for IPv6
+  start_port = 2049
+  end_port = 2049
+}
+
+resource "exoscale_security_group_rule" "nfsd-udp" {
+  security_group_id = "${exoscale_security_group.op.id}"
+  protocol = "UDP"
+  type = "INGRESS"
+  cidr = "0.0.0.0/0"  # "::/0" for IPv6
+  start_port = 2049
+  end_port = 2049
+}
