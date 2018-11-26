@@ -42,19 +42,19 @@ variable "access_token" {
 }
 
 variable "onedatify_install_script_version" {
-  default = "18.02.0.rc10"
+  default = "18.02.0.rc13"
 }
 
 variable "onedatify_oneprovider_version" {
-  default = "onedata/oneprovider:18.02.0-rc11"
+  default = "onedata/oneprovider:18.02.0-rc13"
 }
 
 variable "oneclient_image" {
-  default = "onedata/oneclient:18.02.0-rc11"
+  default = "onedata/oneclient:18.02.0-rc13"
 }
 
 variable "oneclient_package" {
-  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc11-1.el7.centos.x86_64.rpm"
+  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc13-1.el7.centos.x86_64.rpm"
 }
 
 variable "opdomain" {
