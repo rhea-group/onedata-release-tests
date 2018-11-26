@@ -98,6 +98,21 @@ resource "null_resource" "deploy-ceph" {
   }
 }
 
+resource "null_resource" "ceph-nodes-collectd" { 
+  depends_on = ["null_resource.provision-grafana","null_resource.deploy-ceph"]
+  connection {
+    host = "${exoscale_compute.op-ceph.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/collectd.yml -i inventory-ceph.ini --extra-vars \" grafana_ip=${exoscale_compute.grafana.ip_address} \"",
+    ]
+  }
+}
+
 resource "exoscale_security_group" "ceph" {
   name = "${var.project}-ceph"
 }

@@ -43,19 +43,19 @@ variable "access_token" {
 }
 
 variable "onedatify_install_script_version" {
-  default = "18.02.0.rc10"
+  default = "18.02.0.rc13"
 }
 
 variable "onedatify_oneprovider_version" {
-  default = "onedata/oneprovider:18.02.0-rc11"
+  default = "onedata/oneprovider:18.02.0-rc13"
 }
 
 variable "oneclient_image" {
-  default = "onedata/oneclient:18.02.0-rc11"
+  default = "onedata/oneclient:18.02.0-rc13"
 }
 
 variable "oneclient_package" {
-  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc11-1.el7.centos.x86_64.rpm"
+  default = "http://packages.onedata.org/yum/centos/7x/x86_64/oneclient-18.02.0.rc13-1.el7.centos.x86_64.rpm"
 }
 
 variable "opdomain" {
@@ -63,11 +63,11 @@ variable "opdomain" {
 }
 
 variable "support_token_ceph" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgNzMzZDgyZjFmMjA00ZTRiYTQzY2IzNmFkNzI3ZTk3NzcKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgtzY5NjVA1veEKXI02THazZbmM5RlDovP8Fm302MKuxXscK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMDFlYTg3YTExY2VhMTZjMTAxNGM2N2RiMjZmZTg5NmIKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgE00WPaClTUAWLMX01HoAjgMHbW01Zdm00fHeAklLF72BVOoK"
 }
 
 variable "support_token_posix" {
-  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgNGFmOTY2ODA5MDNhMjliODg4NjkxMDQyMzAxZDBmMzkKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUg301Foj2YtXO01k5DvC01R1cfmrX5jNkExw4yytYfpuFm4QK"
+  default = "MDAxNWxvY2F00aW9uIG9uZXpvbmUKMDAzMGlkZW500aWZpZXIgMzRhZjA5MTBlMWYzOGYzNDgxZTYwNzEwMDhjNjQ00ODUKMDAyOGNpZCB00b2tlblR5cGUgPSBzcGFjZV9zdXBwb3J00X3Rva2VuCjAwMmZzaWduYXR1cmUgnQhcLsycmybMISnE9Q1VdIpRBBV4R401Wc1aHEqlWV01EK"
 }
 
 variable "oppass" {
@@ -113,7 +113,7 @@ variable "op-posix-disk" {
 
 ### Oneclients
 variable "client_count" {
-  default = "3"
+  default = "2"
 }
 
 variable "client_flavor" {
@@ -188,7 +188,7 @@ variable "kube-ctlr_count" {
 
 # The number of workers of Kube cluster. 
 variable "kube-work_count" {
-  default = "1"
+  default = "2"
 }
 
 # ### VM (Instance) Settings

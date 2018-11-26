@@ -140,7 +140,7 @@ resource "null_resource" "op-ceph-oneclient" {
 resource "null_resource" "op-ceph-collectd" { 
   depends_on = ["null_resource.provision-grafana"]
   connection {
-    host = "${exoscale_compute.op-posix.ip_address}"
+    host = "${exoscale_compute.op-ceph.ip_address}"
     user     = "${var.ssh_user_name}"
     agent = true
     timeout = "10m"
@@ -181,6 +181,15 @@ resource "exoscale_security_group_rule" "https" {
   cidr = "0.0.0.0/0"  # "::/0" for IPv6
   start_port = 443
   end_port = 443
+}
+
+resource "exoscale_security_group_rule" "grafana" {
+  security_group_id = "${exoscale_security_group.op.id}"
+  protocol = "TCP"
+  type = "INGRESS"
+  user_security_group = "${var.project}-op"  
+  start_port = 2003
+  end_port = 2003
 }
 
 resource "exoscale_security_group_rule" "rtransfer" {

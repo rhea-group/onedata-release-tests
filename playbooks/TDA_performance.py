@@ -2,6 +2,7 @@
 
 import paramiko
 import os
+import logging
 import sys
 import time
 import subprocess
@@ -29,12 +30,15 @@ def remoteCommand(ssh, str, verbose=False):
 
 def waitFile(site, file, status, ssh, filesize=0):
      t = 0
-     timeout = 200
+     timeout = 400
      start = timer()
+     logging.info('Waiting for file {}'.format(file))
      while True:
 #         executeCommand(site, "ls -la " + os.path.dirname(file), ssh)
          res, elapsed = executeCommand(site, "ls -la " + file, ssh)
          if res == 0 and status == "exists":
+             logging.info('File {} found: '.format(file))
+             logging.info('Waiting for size to be {}'.format(str(abs(filesize))))
              while True:
                  res, elapsed = executeCommand(site,
                                                "ls -l --block-size=1 " + file + "| awk '{ print $5 }' | grep " + str(
@@ -42,17 +46,21 @@ def waitFile(site, file, status, ssh, filesize=0):
                  if res == 0:
                      break
                  else:
-                     time.sleep(3)
+                     logging.info('Size still not {} - waiting 5 seconds'.format(str(abs(filesize))))
+                     time.sleep(5) # bkryza: Increased from 3
                      t = t + 1
                      if t > timeout:
                          sys.exit("Wait file status failed " + file)
              break
          elif res != 0 and status == "not exists":
+             logging.info('File {} doesn\'t exist: '.format(file))
              break
          else:
-             time.sleep(3)
+             time.sleep(5) # bkryza: Increased from 3
+             logging.info('File {} not found - waiting 5 seconds: '.format(file))
              t = t + 1
              if t > timeout:
+                 logging.info('File {} not found - timeout exceeded: '.format(file))
                  sys.exit("Wait file status failed " + file)
      end = timer()
      return end - start
@@ -63,6 +71,7 @@ def executeCommand(site, command, ssh, verbose=False):
         print site, command
         sys.stdout.flush()
 
+    logging.info('Executing command {}: {}'.format(site, command))
     if ">" not in command and not verbose:
         command += " >/dev/null 2>&1"
     start = timer()
@@ -75,6 +84,7 @@ def executeCommand(site, command, ssh, verbose=False):
 
 
 def createFileCommand(dir, fname, size):
+    logging.info('Creating empty file {} using dd of size {}'.format(fname, str(size)))
     if size > 0:
         return "dd if=/dev/zero of=" + fname + " iflag=count_bytes count=" + str(size)
     #        return "/usr/sbin/xfs_mkfile "+ str(size) + fname
@@ -94,6 +104,7 @@ def createFileCommand(dir, fname, size):
 
 
 def readFileCommand(dir, fname, size, attempt):
+    logging.info('Reading from file using cat {} > /dev/null'.format(fname))
     if size > 0:
         return "cat " + fname + " >/dev/null"
 
@@ -123,7 +134,8 @@ def getFileSize(args):
     return size
 
 def start(args):
-    print "start"
+    print "starting"
+    logging.info("Starting TDA")
     sys.stdout.flush()
 
     ssh = paramiko.SSHClient()
@@ -155,7 +167,10 @@ def start(args):
         elapsed = executeCommand(dir[0], createFileCommand(dir[0], fname[dir[0]], fileSize), ssh)[1]
         print "%.2f s" % (elapsed)
         sys.stdout.flush()
-
+        print createFileCommand(dir[0], fname[dir[0]], fileSize)
+        sys.stdout.flush()
+        # executeCommand(dir[0], "ls -l "+fname[dir[0]], ssh, True)
+        # executeCommand(dir[0], "md5sum "+fname[dir[0]], ssh, True)
         print "File visible " + resname[dir[1]] + "ly after:",
         sys.stdout.flush()
         timeVis = waitFile(dir[1], fname[dir[1]], "exists", ssh, fileSize)
@@ -166,20 +181,45 @@ def start(args):
         sys.stdout.flush()
     if dir[0] == 'R' and args.waitForReplication == "true":
         # Wait for replication to complete
-        print "Waiting for replication..."
+        logging.info("Waiting for replication...")
         sys.stdout.flush()
+        command = 'curl --tlsv1.2 "https://'+args.providerFQDN+'/configuration"'
+        output=subprocess.check_output(command, stderr=open('err.log', 'a'), shell=True)
+        data = json.loads(output)
+        providerId=data['providerId']
         head, filename = os.path.split(fname["R"])
         command = 'curl --tlsv1.2 -X GET -H "X-Auth-Token: '+args.accessToken+'" "https://'+args.providerFQDN+'/api/v3/oneprovider/replicas/'+args.spacePath+'/'+filename+'"'
+        logging.info("Getting replicas using: {}".format(command))
         print command
         sys.stdout.flush()
         a = "1"
         b = "2"
-        while a != b:
+        not_in_posix_provider_only=True
+        while a != b and not_in_posix_provider_only:
+            time.sleep(5)
             output=subprocess.check_output(command, stderr=open('err.log', 'a'), shell=True)
             data = json.loads(output)
-            a = data[0]["blocks"]
-            b = data[1]["blocks"]
-            time.sleep(5)
+            logging.info("Got file replicas: {}".format(output))
+
+            #print "len=%d" % (len(data))
+            #sys.stdout.flush()
+            if len(data) == 2:
+                #print "in the if"
+                a = data[0]["blocks"]
+                b = data[1]["blocks"]
+                for i in range(len(data)):
+                    if data[i]['providerId'] == providerId:
+                        providerIndex=i
+                        break
+                if len(data[providerIndex]['blocks']) == 1 and len(data[(providerIndex+1) % 2]['blocks']) == 0:
+                    not_in_posix_provider_only = False
+            if len(data) == 1 and data[0]['providerId'] == providerId:
+                not_in_posix_provider_only = False
+                
+            logging.info("Blocks a={}, b={}".format(str(a), str(b)))
+            #print "a=" + a + "  b=" + b
+            #sys.stdout.flush()
+            
 
     realSize = os.path.getsize(fname["L"])
     realSize_MB = realSize / 1024 / 1024
@@ -234,6 +274,12 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
+
+    logging.basicConfig(
+        filename="/tmp/TDA_performance_{}_{}.log".format(args.fileName, os.getpid()),
+        level=logging.DEBUG)
+
+    logging.info("Initialized logging...")
 
     verbose = False
     print "=" * 80

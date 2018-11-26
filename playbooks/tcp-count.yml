@@ -15,4 +15,5 @@
       systemd:
         name: tcp-count
         state: started
+        enabled: yes
         
