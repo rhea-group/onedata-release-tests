@@ -77,6 +77,21 @@ resource "null_resource" "provision-kubespray" {
   }
 }
 
+resource "null_resource" "k8s-nodes-collectd" { 
+  depends_on = ["null_resource.provision-grafana"]
+  connection {
+    host = "${exoscale_compute.op-ceph.ip_address}"
+    user     = "${var.ssh_user_name}"
+    agent = true
+    timeout = "10m"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "ansible-playbook playbooks/collectd.yml -i inventory-kube.ini --extra-vars \" grafana_ip=${exoscale_compute.grafana.ip_address} \"",
+    ]
+  }
+}
+
 resource "null_resource" "provision-helm" {
   depends_on = ["null_resource.provision-kubespray"]
   connection {

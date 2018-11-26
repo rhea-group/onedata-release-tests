@@ -9,7 +9,7 @@
       become: yes
       sysctl:
         name: kernel.core_pattern
-        value: /tmp/core.%e.%p.%h.%t
+        value: "| /usr/lib/systemd/systemd-coredump %p %u %g %s %t %c %e"
     - name: Check for docker
       stat:
         path: /usr/bin/docker
@@ -22,6 +22,7 @@
       systemd:
         name: docker
         state: started
+        enabled: yes
     - name: Install OC package
       become: yes
       yum:
@@ -57,13 +58,13 @@
         name: /tmp/mntoc
         state: directory
     - name: Trying to mount oneclient 
-      shell: "oneclient -H {{oneprovider}} -t {{access_token}} /tmp/mntoc -i -o allow_other --force-direct-io --force-fullblock-read -v 1 --rndrd-prefetch-cluster-window=12582912 --rndrd-prefetch-cluster-block-threshold=5  --cluster-prefetch-threshold-random --monitoring-type graphite --monitoring-level-full --provider-timeout=400  --monitoring-period 5 --graphite-url tcp://{{grafana_ip}}:2003 --graphite-namespace-prefix $(hostname|cut -f1 -d.)"
+      shell: "oneclient -H {{oneprovider}} -t {{access_token}} /tmp/mntoc -i -o allow_other --force-direct-io --force-fullblock-read -v 1 --rndrd-prefetch-cluster-window=12582912 --rndrd-prefetch-cluster-block-threshold=5  --cluster-prefetch-threshold-random --monitoring-type graphite --monitoring-level-full --provider-timeout=30  --monitoring-period 5 --graphite-url tcp://{{grafana_ip}}:2003 --graphite-namespace-prefix $(hostname|cut -f1 -d.)"
       register: res
       until: res.rc == 0
       retries: 12
       delay: 10
     - name: Save oneclient command
       copy:
-        content: "oneclient -H {{oneprovider}} -t {{access_token}} /tmp/mntoc -i -o allow_other --force-direct-io --force-fullblock-read -v 1 --rndrd-prefetch-cluster-window=12582912 --rndrd-prefetch-cluster-block-threshold=5  --cluster-prefetch-threshold-random --monitoring-type graphite --monitoring-level-full --provider-timeout=400  --monitoring-period 5 --graphite-url tcp://{{grafana_ip}}:2003 --graphite-namespace-prefix $(hostname|cut -f1 -d.)"
+        content: "oneclient -H {{oneprovider}} -t {{access_token}} /tmp/mntoc -i -o allow_other --force-direct-io --force-fullblock-read -v 1 --rndrd-prefetch-cluster-window=12582912 --rndrd-prefetch-cluster-block-threshold=5  --cluster-prefetch-threshold-random --monitoring-type graphite --monitoring-level-full --provider-timeout=30  --monitoring-period 5 --graphite-url tcp://{{grafana_ip}}:2003 --graphite-namespace-prefix $(hostname|cut -f1 -d.)"
         dest: /tmp/oneclient.sh
         mode: 0755
